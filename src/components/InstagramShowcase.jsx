@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, MessageCircle, ExternalLink, Sparkles } from 'lucide-react';
+import { Heart, MessageCircle, ExternalLink } from 'lucide-react';
 import { InstagramIcon } from './BrandIcons';
 
 export default function InstagramShowcase() {
@@ -7,53 +7,44 @@ export default function InstagramShowcase() {
     {
       id: 1,
       image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=600&auto=format&fit=crop&q=80',
-      caption: 'Dispatching 300 custom Royale Hampers for an executive leadership retreat. Silk ribbons & laser engraved details! 💼✨',
-      likes: '482',
-      comments: '34'
+      caption: 'Dispatching 300 custom Royale Hampers for corporate onboarding. Laser engraved bottles & diaries! 💼',
+      likes: '482'
     },
     {
       id: 2,
       image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&auto=format&fit=crop&q=80',
-      caption: 'A 50-photo wedding anniversary mosaic that stopped everyone in their tracks. Moments crafted into eternity. ❤️🖼️',
-      likes: '891',
-      comments: '76'
+      caption: 'Wedding anniversary mosaic frame with 50 memories woven together in pine wood framing. ❤️🖼️',
+      likes: '891'
     },
     {
       id: 3,
       image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=600&auto=format&fit=crop&q=80',
-      caption: 'Precision fiber laser test on our Matte Black smart temperature flasks. Look at that crisp silver glow! 🔥',
-      likes: '624',
-      comments: '41'
+      caption: 'Crisp fiber laser test on our matte black smart LED temperature bottles. Permanent metallic finish! 🔥',
+      likes: '624'
     },
     {
       id: 4,
       image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&auto=format&fit=crop&q=80',
-      caption: 'Spotify acrylic plaques glowing in warm beechwood bases. Scan to play their special memories. 🎵💫',
-      likes: '1,120',
-      comments: '98'
+      caption: 'Glowing Spotify acrylic plaques on beechwood LED base. Scan the code to play your song instantly! 🎵',
+      likes: '1,120'
     }
   ];
 
   return (
-    <section className="py-16 sm:py-20 bg-[#0a0a0e] border-b border-[#1b1e2a] relative overflow-hidden">
-      
+    <section className="py-12 sm:py-16 bg-white border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-          <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-950/40 border border-pink-800/40 text-pink-400 text-xs font-bold">
-              <InstagramIcon size={13} />
-              <span>LIVE FROM THE STUDIO</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
-              Crafted With Passion. <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-rose-400 to-red-400">
-                Shared on @heecart_com
-              </span>
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+          <div>
+            <span className="text-red-600 font-bold text-xs uppercase tracking-wider">
+              Follow Us on Instagram
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+              Behind the Scenes at @heecart_com
             </h2>
-            <p className="text-xs sm:text-sm text-slate-300 max-w-xl">
-              Follow our daily behind-the-scenes laser crafting, client unboxing reactions, and festive hampers.
+            <p className="text-xs sm:text-sm text-slate-500">
+              See real unboxings, corporate bulk packaging, and personalized gift deliveries.
             </p>
           </div>
 
@@ -61,50 +52,41 @@ export default function InstagramShowcase() {
             href="https://www.instagram.com/heecart_com/"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-pink-600 to-red-600 hover:from-pink-500 hover:to-red-500 text-white text-xs sm:text-sm font-bold shadow-lg transition-all hover:scale-105 self-start md:self-auto"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-50 hover:bg-pink-100 text-pink-700 font-bold text-xs border border-pink-200 transition-colors self-start sm:self-auto"
           >
-            <InstagramIcon size={16} />
-            <span>Follow @heecart_com</span>
-            <ExternalLink size={14} />
+            <InstagramIcon size={15} />
+            <span>Visit @heecart_com</span>
+            <ExternalLink size={13} />
           </a>
         </div>
 
-        {/* Post Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {posts.map((post) => (
             <a
               key={post.id}
               href="https://www.instagram.com/heecart_com/"
               target="_blank"
               rel="noreferrer"
-              className="group relative rounded-2xl overflow-hidden bg-[#141620] border border-[#242838] hover:border-pink-500/50 transition-all duration-300 block shadow-card-dark"
+              className="group rounded-xl overflow-hidden border border-slate-200 bg-slate-50 hover:border-red-500 transition-all block shadow-sm"
             >
-              <div className="aspect-square w-full overflow-hidden bg-stone-900">
+              <div className="aspect-square w-full overflow-hidden bg-slate-100">
                 <img
                   src={post.image}
                   alt={post.caption}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   loading="lazy"
                 />
               </div>
-
-              {/* Hover overlay with engagement stats */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-                <p className="text-xs text-white line-clamp-2 leading-relaxed">
+              <div className="p-3 bg-white">
+                <p className="text-xs text-slate-700 line-clamp-2 leading-relaxed">
                   {post.caption}
                 </p>
-                <div className="flex items-center justify-between text-xs text-slate-300 pt-2 border-t border-white/20 mt-2">
-                  <div className="flex items-center gap-3">
-                    <span className="flex items-center gap-1 text-pink-400">
-                      <Heart size={14} fill="currentColor" /> {post.likes}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <MessageCircle size={14} /> {post.comments}
-                    </span>
-                  </div>
-                  <span className="text-[10px] text-pink-300 font-bold uppercase tracking-wider">
-                    View on IG →
+                <div className="mt-2 flex items-center justify-between text-[11px] text-slate-400">
+                  <span className="flex items-center gap-1 text-pink-600 font-semibold">
+                    <Heart size={12} fill="currentColor" /> {post.likes}
                   </span>
+                  <span className="text-red-600 font-bold">View post →</span>
                 </div>
               </div>
             </a>
@@ -112,7 +94,6 @@ export default function InstagramShowcase() {
         </div>
 
       </div>
-
     </section>
   );
 }

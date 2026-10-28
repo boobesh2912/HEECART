@@ -1,95 +1,99 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Search, Phone, MessageSquare, Menu, X, ShieldCheck, Sparkles, Truck, Award } from 'lucide-react';
+import { ShoppingBag, Search, Truck, Menu, X, Shield, Lock, Award, MessageCircle } from 'lucide-react';
 
-export default function Navbar({ cartCount, onOpenCart, onOpenTracking, onOpenCorporateRFQ, selectedCategory, onSelectCategory, searchQuery, setSearchQuery }) {
+export default function Navbar({
+  cartCount,
+  onOpenCart,
+  onOpenTracking,
+  onOpenCorporateRFQ,
+  onOpenAdmin,
+  selectedCategory,
+  onSelectCategory,
+  searchQuery,
+  setSearchQuery,
+  onGoHome
+}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchFocused, setSearchFocused] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#0a0a0df2] backdrop-blur-md border-b border-[#222530]">
-      {/* Top Announcement Bar */}
-      <div className="bg-gradient-to-r from-red-950 via-red-900 to-black text-xs text-red-100 py-1.5 px-4 border-b border-red-900/40">
+    <header className="sticky top-0 z-40 w-full bg-white border-b border-slate-200 shadow-sm">
+      
+      {/* Top Banner - Solid Red & White */}
+      <div className="bg-red-600 text-white text-xs font-medium py-1.5 px-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-2 overflow-hidden whitespace-nowrap">
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-red-600 text-white animate-pulse">
-              FESTIVE OFFER
+          <div className="flex items-center gap-2 overflow-hidden whitespace-nowrap">
+            <span className="bg-white text-red-600 font-bold px-1.5 py-0.5 rounded text-[10px] uppercase">
+              Notice
             </span>
-            <span className="font-medium truncate">
-              Use code <strong className="text-white underline">HEECART10</strong> for 10% OFF | Free Pan-India Delivery on orders over ₹999
+            <span className="truncate text-[11px] sm:text-xs">
+              Fast 24-48 Hr Dispatch | Free Digital Mockup on WhatsApp | Use code <strong className="underline">HEECART10</strong> for 10% Off
             </span>
           </div>
-          <div className="hidden md:flex items-center space-x-4 text-[11px] font-medium text-slate-300">
-            <button 
+
+          <div className="hidden md:flex items-center space-x-5 text-[11px]">
+            <button
               onClick={onOpenTracking}
-              className="hover:text-red-400 transition-colors flex items-center gap-1"
+              className="hover:underline flex items-center gap-1 font-semibold"
             >
-              <Truck size={13} className="text-red-500" /> Track Your Order
+              <Truck size={13} /> Track Order
             </button>
-            <span className="text-slate-600">•</span>
-            <a 
-              href="https://wa.me/919876543210?text=Hi%20Heecart,%20I%20would%20like%20to%20inquire%20about%20a%20custom%20gift%20order" 
-              target="_blank" 
-              rel="noreferrer"
-              className="hover:text-green-400 transition-colors flex items-center gap-1 text-green-400 font-semibold"
+            <span>|</span>
+            <button
+              onClick={onOpenAdmin}
+              className="hover:underline flex items-center gap-1 font-semibold bg-red-700 hover:bg-red-800 px-2 py-0.5 rounded text-white"
             >
-              <MessageSquare size={13} /> WhatsApp Design Desk
-            </a>
+              <Lock size={12} /> Admin Portal
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Main Nav Container */}
+      {/* Main Header Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20 gap-4">
           
-          {/* Brand Logo */}
+          {/* Logo & Brand Name */}
           <div className="flex items-center gap-3">
-            <button 
-              onClick={() => { onSelectCategory('all'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-              className="flex items-center gap-3 group text-left"
+            <button
+              onClick={() => {
+                onGoHome();
+                onSelectCategory('all');
+              }}
+              className="flex items-center gap-2.5 text-left group"
             >
-              <div className="relative p-1.5 rounded-xl bg-gradient-to-b from-stone-900 to-stone-950 border border-stone-800 group-hover:border-red-600/60 transition-all shadow-md">
-                <img 
-                  src="/heecart-logo.png" 
-                  alt="HEECART Logo" 
-                  className="h-10 sm:h-12 w-auto object-contain transition-transform group-hover:scale-105"
-                />
-              </div>
-              <div className="hidden sm:block">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xl font-black tracking-tight text-white group-hover:text-red-400 transition-colors">
-                    HEECART<span className="text-red-600">.</span>
-                  </span>
-                  <span className="text-[10px] px-1.5 py-0.5 rounded font-semibold bg-red-950 text-red-400 border border-red-800/40">
-                    STUDIO
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-400 font-normal tracking-wide">
-                  Customized Keepsakes & Corporate Hampers
+              <img
+                src="/heecart-logo.png"
+                alt="HEECART Logo"
+                className="h-10 sm:h-12 w-auto object-contain"
+              />
+              <div>
+                <span className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                  HEECART<span className="text-red-600">.</span>
+                </span>
+                <p className="text-[11px] text-slate-500 font-medium -mt-1 hidden sm:block">
+                  Customized Gifts & Corporate Hampers
                 </p>
               </div>
             </button>
           </div>
 
-          {/* Search Bar - Center */}
-          <div className="hidden lg:flex flex-1 max-w-md mx-4">
-            <div className={`relative w-full transition-all duration-200 ${searchFocused ? 'ring-2 ring-red-600 shadow-glow-red' : ''} rounded-full`}>
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                <Search size={16} />
-              </div>
+          {/* Search Bar - Center Desktop */}
+          <div className="hidden lg:flex flex-1 max-w-md mx-6">
+            <div className="relative w-full">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onFocus={() => setSearchFocused(true)}
-                onBlur={() => setSearchFocused(false)}
-                placeholder="Search photo frames, LED bottles, hampers, plaques..."
-                className="w-full bg-[#14161f] text-slate-100 placeholder-slate-400 text-xs sm:text-sm pl-10 pr-10 py-2.5 rounded-full border border-[#272b3a] focus:outline-none focus:border-red-600"
+                placeholder="Search hampers, LED bottles, photo frames..."
+                className="w-full bg-slate-50 text-slate-800 placeholder-slate-400 text-xs sm:text-sm pl-10 pr-10 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:border-red-600 focus:bg-white transition-all"
               />
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                <Search size={16} />
+              </div>
               {searchQuery && (
-                <button 
+                <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-white"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600"
                 >
                   <X size={15} />
                 </button>
@@ -97,66 +101,69 @@ export default function Navbar({ cartCount, onOpenCart, onOpenTracking, onOpenCo
             </div>
           </div>
 
-          {/* Navigation Links & Action Buttons */}
-          <div className="flex items-center gap-2 sm:gap-4">
+          {/* Right Action Icons & Buttons */}
+          <div className="flex items-center gap-3">
             
-            {/* Corporate RFQ CTA */}
+            {/* WhatsApp Support CTA */}
+            <a
+              href="https://wa.me/919876543210?text=Hi%20Heecart,%20I%20want%20to%20inquire%20about%20a%20custom%20gift%20order"
+              target="_blank"
+              rel="noreferrer"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition-colors"
+            >
+              <MessageCircle size={15} className="text-emerald-600" />
+              <span>WhatsApp Desk</span>
+            </a>
+
+            {/* Bulk RFQ CTA */}
             <button
               onClick={onOpenCorporateRFQ}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-200 bg-[#161822] hover:bg-red-950/60 hover:text-white border border-[#2c3040] hover:border-red-600/50 transition-all shadow-sm"
+              className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 transition-colors"
             >
-              <Award size={14} className="text-red-500" />
-              <span>Bulk Gifting RFQ</span>
+              <Award size={14} className="text-red-600" />
+              <span>Corporate RFQ</span>
             </button>
 
-            {/* Track Order CTA */}
-            <button
-              onClick={onOpenTracking}
-              className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-[#141620] transition-colors"
-            >
-              <Truck size={14} className="text-slate-400" />
-              <span>Track Order</span>
-            </button>
-
-            {/* Shopping Cart Button */}
+            {/* Cart Button */}
             <button
               onClick={onOpenCart}
-              className="relative p-2.5 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-semibold text-xs sm:text-sm flex items-center gap-2 shadow-glow-red hover:shadow-glow-red-lg transition-all active:scale-95"
+              className="relative px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-bold text-xs sm:text-sm flex items-center gap-2 transition-all active:scale-95 shadow-sm"
               aria-label="View Shopping Cart"
             >
-              <ShoppingBag size={18} />
-              <span className="hidden sm:inline">My Cart</span>
-              <span className="flex items-center justify-center min-w-[20px] h-5 px-1 rounded-full bg-white text-red-700 text-xs font-black">
+              <ShoppingBag size={17} />
+              <span className="hidden sm:inline">Cart</span>
+              <span className="bg-white text-red-600 rounded-full px-1.5 py-0.2 text-xs font-black min-w-[18px] text-center">
                 {cartCount}
               </span>
             </button>
 
-            {/* Mobile Hamburger Toggle */}
+            {/* Mobile Hamburger */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-[#161924] transition-colors"
-              aria-label="Toggle navigation menu"
+              className="lg:hidden p-2 text-slate-700 hover:text-red-600 hover:bg-slate-100 rounded-lg"
+              aria-label="Open menu"
             >
               {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
+
         </div>
 
-        {/* Mobile Search Input */}
+        {/* Mobile Search Field */}
         <div className="lg:hidden pb-3">
           <div className="relative w-full">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-              <Search size={15} />
-            </div>
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search photo frames, bottles, hampers..."
-              className="w-full bg-[#12141c] text-slate-200 placeholder-slate-400 text-xs pl-9 pr-8 py-2 rounded-lg border border-[#252837] focus:outline-none focus:border-red-600"
+              placeholder="Search hampers, bottles, frames..."
+              className="w-full bg-slate-50 text-slate-800 placeholder-slate-400 text-xs pl-9 pr-8 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-red-600"
             />
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+              <Search size={15} />
+            </div>
             {searchQuery && (
-              <button 
+              <button
                 onClick={() => setSearchQuery('')}
                 className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400"
               >
@@ -166,82 +173,72 @@ export default function Navbar({ cartCount, onOpenCart, onOpenTracking, onOpenCo
           </div>
         </div>
 
-        {/* Desktop Category Sub-Nav Bar */}
-        <div className="hidden lg:flex items-center justify-between border-t border-[#1b1e2a] py-2.5 text-xs font-medium text-slate-300">
-          <div className="flex items-center space-x-6">
-            <button 
-              onClick={() => onSelectCategory('all')}
-              className={`transition-colors pb-0.5 ${selectedCategory === 'all' ? 'text-red-400 font-bold border-b-2 border-red-500' : 'hover:text-white'}`}
-            >
-              All Masterpieces
-            </button>
-            <button 
-              onClick={() => onSelectCategory('corporate')}
-              className={`transition-colors pb-0.5 flex items-center gap-1 ${selectedCategory === 'corporate' ? 'text-red-400 font-bold border-b-2 border-red-500' : 'hover:text-white'}`}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-red-500 inline-block"></span>
-              Corporate Gifting & Hampers
-            </button>
-            <button 
-              onClick={() => onSelectCategory('frames')}
-              className={`transition-colors pb-0.5 ${selectedCategory === 'frames' ? 'text-red-400 font-bold border-b-2 border-red-500' : 'hover:text-white'}`}
-            >
-              Photo Frames & Keepsakes
-            </button>
-            <button 
-              onClick={() => onSelectCategory('bottles')}
-              className={`transition-colors pb-0.5 ${selectedCategory === 'bottles' ? 'text-red-400 font-bold border-b-2 border-red-500' : 'hover:text-white'}`}
-            >
-              Smart LED Bottles & Drinkware
-            </button>
-            <button 
-              onClick={() => onSelectCategory('keychains')}
-              className={`transition-colors pb-0.5 ${selectedCategory === 'keychains' ? 'text-red-400 font-bold border-b-2 border-red-500' : 'hover:text-white'}`}
-            >
-              Keychains & Leather Sets
-            </button>
-            <button 
-              onClick={() => onSelectCategory('hampers')}
-              className={`transition-colors pb-0.5 ${selectedCategory === 'hampers' ? 'text-red-400 font-bold border-b-2 border-red-500' : 'hover:text-white'}`}
-            >
-              Luxury Gift Boxes
-            </button>
-          </div>
-
-          <div className="flex items-center space-x-4 text-slate-400 text-[11px]">
-            <span className="flex items-center gap-1 text-emerald-400 font-medium">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-              Express 24H Dispatch Available
-            </span>
-          </div>
+        {/* Desktop Category Sub-Nav (Printmine style) */}
+        <div className="hidden lg:flex items-center space-x-8 border-t border-slate-100 py-3 text-xs font-semibold text-slate-700">
+          <button
+            onClick={() => { onGoHome(); onSelectCategory('all'); }}
+            className={`transition-colors pb-0.5 ${selectedCategory === 'all' ? 'text-red-600 font-bold border-b-2 border-red-600' : 'hover:text-red-600'}`}
+          >
+            All Products
+          </button>
+          <button
+            onClick={() => { onGoHome(); onSelectCategory('hampers'); }}
+            className={`transition-colors pb-0.5 ${selectedCategory === 'hampers' ? 'text-red-600 font-bold border-b-2 border-red-600' : 'hover:text-red-600'}`}
+          >
+            Corporate Hampers & Gift Sets
+          </button>
+          <button
+            onClick={() => { onGoHome(); onSelectCategory('bottles'); }}
+            className={`transition-colors pb-0.5 ${selectedCategory === 'bottles' ? 'text-red-600 font-bold border-b-2 border-red-600' : 'hover:text-red-600'}`}
+          >
+            LED Temperature Bottles
+          </button>
+          <button
+            onClick={() => { onGoHome(); onSelectCategory('frames'); }}
+            className={`transition-colors pb-0.5 ${selectedCategory === 'frames' ? 'text-red-600 font-bold border-b-2 border-red-600' : 'hover:text-red-600'}`}
+          >
+            Photo Frames & Spotify Plaques
+          </button>
+          <button
+            onClick={() => { onGoHome(); onSelectCategory('stationery'); }}
+            className={`transition-colors pb-0.5 ${selectedCategory === 'stationery' ? 'text-red-600 font-bold border-b-2 border-red-600' : 'hover:text-red-600'}`}
+          >
+            Diaries, Pens & Desk Sets
+          </button>
+          <button
+            onClick={() => { onGoHome(); onSelectCategory('combos'); }}
+            className={`transition-colors pb-0.5 ${selectedCategory === 'combos' ? 'text-red-600 font-bold border-b-2 border-red-600' : 'hover:text-red-600'}`}
+          >
+            Personalized Combos
+          </button>
         </div>
+
       </div>
 
-      {/* Mobile Menu Drawer */}
+      {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-[#202330] bg-[#0c0d12] px-4 pt-3 pb-6 space-y-3 animate-fadeIn">
+        <div className="lg:hidden border-t border-slate-200 bg-white px-4 py-4 space-y-3">
           <div className="space-y-1">
-            <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider px-2 py-1">
-              Browse Categories
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+              Product Categories
             </p>
             {[
-              { id: 'all', label: 'All Collections' },
-              { id: 'corporate', label: 'Corporate Gifting & Hampers' },
+              { id: 'all', label: 'All Products' },
+              { id: 'hampers', label: 'Hampers & Gift Sets' },
+              { id: 'bottles', label: 'LED Temperature Bottles' },
               { id: 'frames', label: 'Photo Frames & Keepsakes' },
-              { id: 'bottles', label: 'LED Bottles & Drinkware' },
-              { id: 'keychains', label: 'Keychains & Combos' },
-              { id: 'hampers', label: 'Curated Gift Boxes' },
+              { id: 'stationery', label: 'Diaries & Desk Sets' },
+              { id: 'combos', label: 'Combo Gifts' },
             ].map(cat => (
               <button
                 key={cat.id}
                 onClick={() => {
+                  onGoHome();
                   onSelectCategory(cat.id);
                   setMobileMenuOpen(false);
                 }}
-                className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  selectedCategory === cat.id 
-                    ? 'bg-red-600/20 text-red-400 border border-red-600/40' 
-                    : 'text-slate-300 hover:bg-[#161822]'
+                className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium ${
+                  selectedCategory === cat.id ? 'bg-red-50 text-red-600 font-bold' : 'text-slate-700 hover:bg-slate-50'
                 }`}
               >
                 {cat.label}
@@ -249,36 +246,31 @@ export default function Navbar({ cartCount, onOpenCart, onOpenTracking, onOpenCo
             ))}
           </div>
 
-          <div className="pt-3 border-t border-[#1e212c] space-y-2">
-            <button
-              onClick={() => {
-                onOpenCorporateRFQ();
-                setMobileMenuOpen(false);
-              }}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-semibold bg-red-600/20 text-red-300 border border-red-600/50"
-            >
-              <Award size={15} /> Request Corporate Bulk Quote
-            </button>
+          <div className="pt-3 border-t border-slate-100 space-y-2">
             <button
               onClick={() => {
                 onOpenTracking();
                 setMobileMenuOpen(false);
               }}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-medium bg-[#161822] text-slate-200 border border-[#2a2e3e]"
+              className="w-full text-left px-3 py-2 text-xs text-slate-700 font-medium flex items-center gap-2"
             >
-              <Truck size={15} /> Track Ongoing Order
+              <Truck size={14} className="text-red-600" />
+              <span>Track Your Order</span>
             </button>
-            <a
-              href="https://www.instagram.com/heecart_com/"
-              target="_blank"
-              rel="noreferrer"
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-medium text-pink-400 bg-pink-950/20 border border-pink-900/30"
+            <button
+              onClick={() => {
+                onOpenAdmin();
+                setMobileMenuOpen(false);
+              }}
+              className="w-full text-left px-3 py-2 text-xs text-red-700 font-bold flex items-center gap-2 bg-red-50 rounded-lg"
             >
-              Follow @heecart_com on Instagram
-            </a>
+              <Lock size={14} className="text-red-600" />
+              <span>Admin & CRM Portal</span>
+            </button>
           </div>
         </div>
       )}
+
     </header>
   );
 }

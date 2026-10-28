@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import TrustFeatures from './components/TrustFeatures';
 import ProductCard from './components/ProductCard';
+import ProductPage from './components/ProductPage';
 import ProductCustomizerModal from './components/ProductCustomizerModal';
 import CorporateQuoteCalculator from './components/CorporateQuoteCalculator';
 import OrderTrackingModal from './components/OrderTrackingModal';
@@ -12,16 +13,69 @@ import ReviewsSection from './components/ReviewsSection';
 import InstagramShowcase from './components/InstagramShowcase';
 import FAQSection from './components/FAQSection';
 import Footer from './components/Footer';
-import { PRODUCTS, CATEGORIES } from './data/products';
-import { Filter, SlidersHorizontal, Sparkles, Check, ArrowRight, MessageSquare, Award } from 'lucide-react';
+import AdminDashboard from './components/AdminDashboard';
+import { INITIAL_PRODUCTS, INITIAL_REVIEWS, INITIAL_ORDERS, CATEGORIES } from './data/products';
+import { SlidersHorizontal, Check, Award, Lock, Sparkles, Filter } from 'lucide-react';
 
 export default function App() {
-  // Navigation & Filter States
+  // Products, Reviews, and Orders with LocalStorage persistence
+  const [products, setProducts] = useState(() => {
+    try {
+      const saved = localStorage.getItem('heecart_live_products');
+      return saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
+    } catch (e) {
+      return INITIAL_PRODUCTS;
+    }
+  });
+
+  const [reviews, setReviews] = useState(() => {
+    try {
+      const saved = localStorage.getItem('heecart_live_reviews');
+      return saved ? JSON.parse(saved) : INITIAL_REVIEWS;
+    } catch (e) {
+      return INITIAL_REVIEWS;
+    }
+  });
+
+  const [orders, setOrders] = useState(() => {
+    try {
+      const saved = localStorage.getItem('heecart_live_orders');
+      return saved ? JSON.parse(saved) : INITIAL_ORDERS;
+    } catch (e) {
+      return INITIAL_ORDERS;
+    }
+  });
+
+  // Save to LocalStorage whenever modified by Admin or customer
+  useEffect(() => {
+    try {
+      localStorage.setItem('heecart_live_products', JSON.stringify(products));
+    } catch (e) {}
+  }, [products]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('heecart_live_reviews', JSON.stringify(reviews));
+    } catch (e) {}
+  }, [reviews]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('heecart_live_orders', JSON.stringify(orders));
+    } catch (e) {}
+  }, [orders]);
+
+  // View state: 'home' or 'product-page'
+  const [currentView, setCurrentView] = useState('home');
+  const [activeProduct, setActiveProduct] = useState(null);
+
+  // Filters & Search
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [filterTag, setFilterTag] = useState('all'); // 'all', 'featured', 'top-sales'
   const [sortBy, setSortBy] = useState('popular'); // popular, price-asc, price-desc, rating
 
-  // Cart State with LocalStorage Persistence
+  // Cart State
   const [cart, setCart] = useState(() => {
     try {
       const saved = localStorage.getItem('heecart_bag');
@@ -34,39 +88,37 @@ export default function App() {
   useEffect(() => {
     try {
       localStorage.setItem('heecart_bag', JSON.stringify(cart));
-    } catch (e) {
-      // ignore
-    }
+    } catch (e) {}
   }, [cart]);
 
-  // Modal States
+  // Modals
   const [customizerProduct, setCustomizerProduct] = useState(null);
   const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isTrackingOpen, setIsTrackingOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [checkoutData, setCheckoutData] = useState(null);
   const [toastMessage, setToastMessage] = useState('');
 
   const showToast = (msg) => {
     setToastMessage(msg);
-    setTimeout(() => setToastMessage(''), 3500);
+    setTimeout(() => setToastMessage(''), 3000);
   };
 
-  // Add Item to Cart
+  // Cart operations
   const handleAddToCart = (customizedItem) => {
-    setCart((prev) => [...prev, customizedItem]);
+    setCart(prev => [...prev, customizedItem]);
     showToast(`Added "${customizedItem.product.name}" to your bag!`);
     setIsCartOpen(true);
   };
 
   const handleUpdateQuantity = (index, newQty) => {
-    setCart((prev) => {
+    setCart(prev => {
       const updated = [...prev];
       const item = updated[index];
       let newUnitPrice = item.product.price;
-      
-      // Update corporate tier if bulk
+
       if (item.product.corporateTierPricing?.length > 0) {
         const matchedTier = [...item.product.corporateTierPricing].reverse().find(t => newQty >= t.min);
         if (matchedTier) newUnitPrice = matchedTier.price;
@@ -81,8 +133,52 @@ export default function App() {
   };
 
   const handleRemoveItem = (index) => {
-    setCart((prev) => prev.filter((_, i) => i !== index));
+    setCart(prev => prev.filter((_, i) => i !== index));
     showToast('Item removed from bag');
+  };
+
+  // Admin CRUD Handlers
+  const handleAddProduct = (newProd) => {
+    setProducts(prev => [newProd, ...prev]);
+    showToast(`New product "${newProd.name}" added to store!`);
+  };
+
+  const handleUpdateProduct = (updatedProd) => {
+    setProducts(prev => prev.map(p => p.id === updatedProd.id ? { ...p, ...updatedProd } : p));
+    showToast(`Product "${updatedProd.name}" updated live!`);
+  };
+
+  const handleDeleteProduct = (prodId) => {
+    setProducts(prev => prev.filter(p => p.id !== prodId));
+    showToast('Product removed from store.');
+  };
+
+  const handleAddReview = (newRev) => {
+    setReviews(prev => [newRev, ...prev]);
+    showToast('Customer review published live!');
+  };
+
+  const handleDeleteReview = (revId) => {
+    setReviews(prev => prev.filter(r => r.id !== revId));
+    showToast('Review removed.');
+  };
+
+  const handleUpdateOrderStatus = (orderId, newStatus) => {
+    setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
+    showToast(`Order #${orderId} status set to ${newStatus}`);
+  };
+
+  // Open Dedicated Product Page
+  const handleSelectProduct = (product) => {
+    setActiveProduct(product);
+    setCurrentView('product-page');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleGoHome = () => {
+    setCurrentView('home');
+    setActiveProduct(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleOpenCustomizer = (product) => {
@@ -91,181 +187,221 @@ export default function App() {
   };
 
   const handleQuickInquiry = (product) => {
-    const msg = `Hi Heecart Studio! I'm interested in customizing "${product.name}" (Base Price: ₹${product.price}). Could you please share options and mockup details?`;
+    const msg = `Hi Heecart! I want to inquire about "${product.name}" (Price: ₹${product.price}). Please share customization options.`;
     window.open(`https://wa.me/919876543210?text=${encodeURIComponent(msg)}`, '_blank');
   };
 
   const handleScrollToCorporate = () => {
-    const el = document.getElementById('corporate-rfq');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+    if (currentView !== 'home') {
+      setCurrentView('home');
+      setTimeout(() => {
+        const el = document.getElementById('corporate-rfq');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      const el = document.getElementById('corporate-rfq');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   const handleScrollToProducts = () => {
-    const el = document.getElementById('catalog-section');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+    if (currentView !== 'home') {
+      setCurrentView('home');
+      setTimeout(() => {
+        const el = document.getElementById('catalog-section');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      const el = document.getElementById('catalog-section');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   // Filter & Search Logic
-  const filteredProducts = PRODUCTS.filter((item) => {
-    const matchesCategory = 
-      selectedCategory === 'all' ? true :
-      selectedCategory === 'corporate' ? (item.category === 'corporate' || item.corporateTierPricing?.length > 0) :
-      item.category === selectedCategory;
+  const filteredProducts = products.filter(item => {
+    const matchesCategory = selectedCategory === 'all' ? true : item.category === selectedCategory;
+    
+    const matchesTag = 
+      filterTag === 'all' ? true :
+      filterTag === 'featured' ? !!item.isFeatured :
+      filterTag === 'top-sales' ? !!item.isTopSales : true;
 
     const matchesSearch = 
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.tagline.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.categoryName.toLowerCase().includes(searchQuery.toLowerCase());
+      item.tagline?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.categoryName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.tags?.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()));
 
-    return matchesCategory && matchesSearch;
+    return matchesCategory && matchesTag && matchesSearch;
   }).sort((a, b) => {
     if (sortBy === 'price-asc') return a.price - b.price;
     if (sortBy === 'price-desc') return b.price - a.price;
-    if (sortBy === 'rating') return b.rating - a.rating;
-    return b.reviewsCount - a.reviewsCount; // popular
+    if (sortBy === 'rating') return (b.rating || 0) - (a.rating || 0);
+    return (b.reviewsCount || 0) - (a.reviewsCount || 0);
   });
 
   return (
-    <div className="min-h-screen bg-[#08090b] text-slate-100 flex flex-col selection:bg-red-600 selection:text-white">
+    <div className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col font-sans selection:bg-red-600 selection:text-white">
       
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-gradient-to-r from-red-600 to-red-700 text-white text-xs font-bold shadow-glow-red-lg animate-bounce">
-          <Check size={16} />
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-lg bg-slate-900 text-white text-xs font-bold shadow-xl border border-slate-700 animate-fadeIn">
+          <Check size={15} className="text-emerald-400" />
           <span>{toastMessage}</span>
         </div>
       )}
 
-      {/* Main Navigation Bar */}
+      {/* Main Navbar */}
       <Navbar
         cartCount={cart.reduce((acc, item) => acc + item.quantity, 0)}
         onOpenCart={() => setIsCartOpen(true)}
         onOpenTracking={() => setIsTrackingOpen(true)}
         onOpenCorporateRFQ={handleScrollToCorporate}
+        onOpenAdmin={() => setIsAdminOpen(true)}
         selectedCategory={selectedCategory}
-        onSelectCategory={setSelectedCategory}
+        onSelectCategory={(cat) => {
+          setSelectedCategory(cat);
+          if (currentView !== 'home') setCurrentView('home');
+        }}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        onGoHome={handleGoHome}
       />
 
-      {/* Hero Section */}
-      <Hero
-        onExploreClick={handleScrollToProducts}
-        onCorporateClick={handleScrollToCorporate}
-      />
+      {/* Main Body: Switch between Home and Individual Product Page */}
+      {currentView === 'product-page' && activeProduct ? (
+        <ProductPage
+          product={activeProduct}
+          onBack={handleGoHome}
+          onAddToCart={handleAddToCart}
+          reviews={reviews}
+          onAddReview={handleAddReview}
+        />
+      ) : (
+        /* Home View (Printmine style) */
+        <>
+          <Hero
+            onExploreClick={handleScrollToProducts}
+            onCorporateClick={handleScrollToCorporate}
+          />
 
-      {/* Trust & Corporate Assurance Strip */}
-      <TrustFeatures />
+          <TrustFeatures />
 
-      {/* Main Catalog Section */}
-      <section id="catalog-section" className="py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        
-        {/* Section Header & Title */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-950/40 border border-red-800/40 text-red-400 text-xs font-bold mb-2">
-              <Sparkles size={12} />
-              <span>THE HEECART GALLERY</span>
+          {/* Catalog Section */}
+          <section id="catalog-section" className="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            
+            {/* Header & Controls */}
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+              <div>
+                <span className="text-red-600 font-bold text-xs uppercase tracking-wider">
+                  The Heecart Collection
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                  {selectedCategory === 'hampers' ? 'Corporate Hampers & Gift Sets' :
+                   selectedCategory === 'bottles' ? 'LED Temperature Bottles' :
+                   selectedCategory === 'frames' ? 'Photo Frames & Spotify Plaques' :
+                   selectedCategory === 'stationery' ? 'Diaries, Pens & Desk Sets' :
+                   selectedCategory === 'combos' ? 'Personalized Combos' : 'All Personalized Gifts & Hampers'}
+                </h2>
+                <p className="text-xs text-slate-500 mt-1">
+                  Custom laser engraving and UV printing on all orders. Free digital mockups.
+                </p>
+              </div>
+
+              {/* Filters & Sorting */}
+              <div className="flex flex-wrap items-center gap-3">
+                {/* Tag Filter Chips */}
+                <div className="flex items-center gap-1.5 bg-white p-1 rounded-lg border border-slate-200 text-xs">
+                  <button
+                    onClick={() => setFilterTag('all')}
+                    className={`px-2.5 py-1 rounded font-semibold ${filterTag === 'all' ? 'bg-red-600 text-white' : 'text-slate-600 hover:text-slate-900'}`}
+                  >
+                    All
+                  </button>
+                  <button
+                    onClick={() => setFilterTag('featured')}
+                    className={`px-2.5 py-1 rounded font-semibold ${filterTag === 'featured' ? 'bg-red-600 text-white' : 'text-slate-600 hover:text-slate-900'}`}
+                  >
+                    Featured
+                  </button>
+                  <button
+                    onClick={() => setFilterTag('top-sales')}
+                    className={`px-2.5 py-1 rounded font-semibold ${filterTag === 'top-sales' ? 'bg-red-600 text-white' : 'text-slate-600 hover:text-slate-900'}`}
+                  >
+                    Top Sales
+                  </button>
+                </div>
+
+                {/* Sort dropdown */}
+                <div className="flex items-center gap-1 text-xs text-slate-500">
+                  <SlidersHorizontal size={13} />
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="bg-white text-xs font-semibold text-slate-700 py-1.5 px-2.5 rounded-lg border border-slate-200 focus:outline-none focus:border-red-600"
+                  >
+                    <option value="popular">Most Popular</option>
+                    <option value="rating">Highest Rated</option>
+                    <option value="price-asc">Price: Low to High</option>
+                    <option value="price-desc">Price: High to Low</option>
+                  </select>
+                </div>
+              </div>
             </div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
-              Curated Customized Creations
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-400 max-w-xl mt-1">
-              Every item is tailored with your photos, names, dates, or corporate branding. Approved via WhatsApp before crafting.
-            </p>
-          </div>
 
-          {/* Sort By Dropdown */}
-          <div className="flex items-center gap-2 self-start md:self-auto">
-            <span className="text-xs text-slate-400 flex items-center gap-1">
-              <SlidersHorizontal size={13} /> Sort:
-            </span>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="bg-[#141622] text-xs font-semibold text-slate-200 py-2 px-3 rounded-xl border border-[#272b3c] focus:outline-none focus:border-red-500 cursor-pointer"
-            >
-              <option value="popular">Most Popular</option>
-              <option value="rating">Highest Rated</option>
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
-            </select>
-          </div>
-        </div>
+            {/* Product Grid */}
+            {filteredProducts.length === 0 ? (
+              <div className="py-16 text-center space-y-3 bg-white rounded-xl border border-slate-200 p-8">
+                <p className="text-base font-bold text-slate-800">No products found matching your filter</p>
+                <button
+                  onClick={() => { setSelectedCategory('all'); setFilterTag('all'); setSearchQuery(''); }}
+                  className="px-4 py-2 bg-red-600 text-white font-bold text-xs rounded-lg"
+                >
+                  Reset All Filters
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                {filteredProducts.map(product => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    onSelectProduct={handleSelectProduct}
+                    onCustomize={handleOpenCustomizer}
+                    onQuickInquiry={handleQuickInquiry}
+                  />
+                ))}
+              </div>
+            )}
 
-        {/* Category Pills Strip */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 scrollbar-none">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setSelectedCategory(cat.id)}
-              className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex items-center gap-2 ${
-                selectedCategory === cat.id
-                  ? 'bg-red-600 text-white shadow-glow-red'
-                  : 'bg-[#13151f] text-slate-400 hover:text-white border border-[#222536] hover:border-slate-600'
-              }`}
-            >
-              <span>{cat.name}</span>
-              <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${
-                selectedCategory === cat.id ? 'bg-red-900 text-red-200' : 'bg-[#1e2230] text-slate-400'
-              }`}>
-                {cat.id === 'all' ? PRODUCTS.length : PRODUCTS.filter(p => cat.id === 'corporate' ? (p.category === 'corporate' || p.corporateTierPricing?.length > 0) : p.category === cat.id).length}
-              </span>
-            </button>
-          ))}
-        </div>
+          </section>
 
-        {/* Product Cards Grid */}
-        {filteredProducts.length === 0 ? (
-          <div className="py-20 text-center space-y-3 bg-[#11131c] rounded-3xl border border-[#232738] p-8">
-            <p className="text-lg font-bold text-white">No products found matching "{searchQuery}"</p>
-            <p className="text-xs text-slate-400">Try searching for "hamper", "bottle", "frame", or reset categories.</p>
-            <button
-              onClick={() => { setSelectedCategory('all'); setSearchQuery(''); }}
-              className="px-4 py-2 rounded-xl bg-red-600 text-white text-xs font-bold"
-            >
-              Reset Filters
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
-            {filteredProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onCustomize={handleOpenCustomizer}
-                onQuickInquiry={handleQuickInquiry}
-              />
-            ))}
-          </div>
-        )}
+          {/* Corporate RFQ Calculator */}
+          <CorporateQuoteCalculator products={products} />
 
-      </section>
+          {/* Reviews Section */}
+          <ReviewsSection reviews={reviews} />
 
-      {/* Corporate Slab Quotation & RFQ Calculator */}
-      <CorporateQuoteCalculator />
+          {/* Instagram Showcase */}
+          <InstagramShowcase />
 
-      {/* Verified Reviews Section */}
-      <ReviewsSection />
-
-      {/* Instagram Community Showcase */}
-      <InstagramShowcase />
-
-      {/* Frequently Asked Questions */}
-      <FAQSection />
+          {/* FAQ Accordion */}
+          <FAQSection />
+        </>
+      )}
 
       {/* Footer */}
       <Footer
-        onSelectCategory={setSelectedCategory}
+        onSelectCategory={(cat) => {
+          setSelectedCategory(cat);
+          if (currentView !== 'home') setCurrentView('home');
+        }}
         onOpenCorporateRFQ={handleScrollToCorporate}
         onOpenTracking={() => setIsTrackingOpen(true)}
+        onOpenAdmin={() => setIsAdminOpen(true)}
       />
 
-      {/* Modals & Slide-out Drawers */}
+      {/* Modals */}
       <ProductCustomizerModal
         product={customizerProduct}
         isOpen={isCustomizerOpen}
@@ -300,6 +436,21 @@ export default function App() {
       <OrderTrackingModal
         isOpen={isTrackingOpen}
         onClose={() => setIsTrackingOpen(false)}
+      />
+
+      {/* Store Admin & CRM Dashboard */}
+      <AdminDashboard
+        isOpen={isAdminOpen}
+        onClose={() => setIsAdminOpen(false)}
+        products={products}
+        onAddProduct={handleAddProduct}
+        onUpdateProduct={handleUpdateProduct}
+        onDeleteProduct={handleDeleteProduct}
+        reviews={reviews}
+        onAddReview={handleAddReview}
+        onDeleteReview={handleDeleteReview}
+        orders={orders}
+        onUpdateOrderStatus={handleUpdateOrderStatus}
       />
 
     </div>

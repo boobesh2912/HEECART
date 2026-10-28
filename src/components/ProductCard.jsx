@@ -1,131 +1,115 @@
 import React from 'react';
-import { Star, Sparkles, Wand2, MessageCircle, ArrowUpRight, Award, Clock } from 'lucide-react';
+import { Star, Wand2, MessageCircle, Eye } from 'lucide-react';
 
-export default function ProductCard({ product, onCustomize, onQuickInquiry }) {
+export default function ProductCard({ product, onSelectProduct, onCustomize, onQuickInquiry }) {
   const discountPercent = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
 
   return (
-    <div className="group relative flex flex-col rounded-2xl bg-[#12141c] border border-[#232737] hover:border-red-600/50 transition-all duration-300 hover:shadow-card-dark overflow-hidden">
+    <div 
+      onClick={() => onSelectProduct(product)}
+      className="group relative flex flex-col rounded-xl bg-white border border-slate-200 hover:border-red-500 hover:shadow-md transition-all duration-200 overflow-hidden cursor-pointer"
+    >
       
       {/* Top Image Container */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-stone-900">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
         <img
           src={product.image}
           alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
         />
 
-        {/* Badge */}
-        {product.badge && (
-          <div className="absolute top-3 left-3 z-10">
-            <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
-              product.badgeType === 'corporate' 
-                ? 'bg-blue-900/90 text-blue-200 border border-blue-700/50'
-                : product.badgeType === 'eco'
-                ? 'bg-emerald-900/90 text-emerald-200 border border-emerald-700/50'
-                : product.badgeType === 'luxury'
-                ? 'bg-amber-900/90 text-amber-200 border border-amber-700/50'
-                : 'bg-red-600/95 text-white shadow-sm'
-            }`}>
-              <Sparkles size={11} />
-              {product.badge}
+        {/* Discount Badge */}
+        <div className="absolute top-2.5 left-2.5 z-10 flex flex-col gap-1">
+          <span className="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-sm">
+            {discountPercent}% OFF
+          </span>
+          {product.isTopSales && (
+            <span className="bg-amber-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
+              TOP SALE
             </span>
-          </div>
-        )}
-
-        {/* Lead time pill */}
-        <div className="absolute bottom-2.5 left-2.5 z-10 flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-black/75 backdrop-blur-md text-slate-300 border border-white/10">
-          <Clock size={10} className="text-red-400" />
-          <span>{product.leadTime}</span>
+          )}
+          {product.isFeatured && (
+            <span className="bg-slate-900 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
+              FEATURED
+            </span>
+          )}
         </div>
 
-        {/* Quick WhatsApp Inquiry Floating Button */}
+        {/* WhatsApp Quick Chat */}
         <button
           onClick={(e) => {
             e.stopPropagation();
             onQuickInquiry(product);
           }}
-          className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-emerald-600/90 hover:bg-emerald-500 text-white flex items-center justify-center opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-200 shadow-lg hover:scale-110"
-          title="Inquire directly on WhatsApp"
+          className="absolute top-2.5 right-2.5 z-10 w-8 h-8 rounded-full bg-white/90 hover:bg-emerald-600 hover:text-white text-emerald-600 flex items-center justify-center shadow transition-colors"
+          title="Inquire on WhatsApp"
         >
-          <MessageCircle size={17} />
+          <MessageCircle size={15} />
         </button>
       </div>
 
-      {/* Product Content Body */}
-      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-4">
-        <div className="space-y-2">
+      {/* Body Content */}
+      <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
+        <div className="space-y-1.5">
           
-          {/* Category & Rating */}
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-[11px] font-semibold text-red-400 uppercase tracking-wider">
+          <div className="flex items-center justify-between text-xs text-slate-500">
+            <span className="font-semibold text-slate-500 uppercase tracking-wider text-[10px]">
               {product.categoryName}
             </span>
-            <div className="flex items-center gap-1 text-slate-300">
-              <Star size={13} className="text-amber-400 fill-amber-400" />
-              <span className="font-bold text-xs">{product.rating}</span>
-              <span className="text-[11px] text-slate-400">({product.reviewsCount})</span>
+            <div className="flex items-center gap-1 text-slate-700">
+              <Star size={12} className="text-amber-500 fill-amber-500" />
+              <span className="font-bold text-xs">{product.rating || 4.9}</span>
+              <span className="text-[10px] text-slate-400">({product.reviewsCount || 120})</span>
             </div>
           </div>
 
-          {/* Product Title */}
-          <h3 className="text-sm sm:text-base font-bold text-white group-hover:text-red-400 transition-colors line-clamp-1">
+          <h3 className="text-sm font-bold text-slate-900 group-hover:text-red-600 transition-colors line-clamp-1">
             {product.name}
           </h3>
 
-          {/* Tagline */}
-          <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+          <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
             {product.tagline}
           </p>
 
-          {/* Key personalization highlight */}
-          <div className="pt-1 flex items-center gap-1.5 text-[11px] text-slate-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-            <span>
-              {product.customizationType === 'corporate_bulk' 
-                ? 'Custom Logo & Individual Name Engraving' 
-                : product.customizationType === 'photo_text' 
-                ? 'Custom Photos + Names & Song Barcode'
-                : 'Free Name Laser Engraving + Gift Box'}
-            </span>
-          </div>
-
-          {/* Corporate Slab Pricing Note if applicable */}
+          {/* Bulk Corporate slab note */}
           {product.corporateTierPricing?.length > 0 && (
-            <div className="mt-2 py-1 px-2.5 rounded bg-[#181b26] border border-[#272b3a] flex items-center justify-between text-[11px]">
-              <span className="text-slate-400 font-medium">Bulk Corporate Slab:</span>
-              <span className="text-emerald-400 font-bold">
-                From ₹{product.corporateTierPricing[product.corporateTierPricing.length - 1].price}/pc
-              </span>
+            <div className="pt-1 flex items-center justify-between text-[11px] bg-red-50 text-red-700 px-2 py-0.5 rounded">
+              <span className="font-medium">Bulk Slabs:</span>
+              <span className="font-bold">From ₹{product.corporateTierPricing[product.corporateTierPricing.length - 1].price}/unit</span>
             </div>
           )}
 
         </div>
 
-        {/* Pricing & CTA */}
-        <div className="pt-3 border-t border-[#1f2331] flex items-center justify-between gap-3">
+        {/* Pricing & Action */}
+        <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2">
           <div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-lg sm:text-xl font-black text-white">
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-base sm:text-lg font-black text-slate-900">
                 ₹{product.price.toLocaleString('en-IN')}
               </span>
               <span className="text-xs text-slate-400 line-through">
                 ₹{product.originalPrice.toLocaleString('en-IN')}
               </span>
             </div>
-            <span className="text-[10px] font-bold text-emerald-400">
-              Save {discountPercent}% today
+            <span className="text-[10px] text-slate-500">
+              {product.stock > 0 ? `${product.stock} in stock` : 'Made to order'}
             </span>
           </div>
 
-          <button
-            onClick={() => onCustomize(product)}
-            className="px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-glow-red hover:shadow-glow-red-lg transition-all active:scale-95 flex-shrink-0"
-          >
-            <Wand2 size={13} />
-            <span>Customize</span>
-          </button>
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onCustomize(product);
+              }}
+              className="px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-bold flex items-center gap-1 transition-all"
+            >
+              <Wand2 size={12} />
+              <span>Customize</span>
+            </button>
+          </div>
         </div>
 
       </div>
