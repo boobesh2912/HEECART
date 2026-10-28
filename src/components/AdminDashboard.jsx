@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   Lock, KeyRound, ShieldCheck, Plus, Trash2, Edit2, CheckCircle2, 
-  Package, Star, MessageSquare, AlertTriangle, LogOut, RefreshCw, Eye, EyeOff, Tag, Check, Award
+  Package, Star, MessageSquare, AlertTriangle, LogOut, RefreshCw, Eye, EyeOff, Tag, Check, Award, Truck, Percent, Gift, Send
 } from 'lucide-react';
 
 export default function AdminDashboard({
@@ -15,11 +15,16 @@ export default function AdminDashboard({
   onAddReview,
   onDeleteReview,
   orders,
-  onUpdateOrderStatus
+  onUpdateOrderStatus,
+  onUpdateOrderCourier,
+  coupons,
+  onAddCoupon,
+  onDeleteCoupon,
+  onToggleCoupon
 }) {
   if (!isOpen) return null;
 
-  // Authentication State with Security Protocols
+  // Authentication State
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return sessionStorage.getItem('heecart_admin_session') === 'authenticated_token_active';
   });
@@ -30,7 +35,7 @@ export default function AdminDashboard({
   const [failedAttempts, setFailedAttempts] = useState(0);
   const [isLocked, setIsLocked] = useState(false);
 
-  // Active Tab: 'products', 'reviews', 'orders', 'security'
+  // Active Tab: 'products', 'reviews', 'orders', 'coupons'
   const [activeTab, setActiveTab] = useState('products');
 
   // Product Form State (Add / Edit)
@@ -56,7 +61,20 @@ export default function AdminDashboard({
   const [revComment, setRevComment] = useState('');
   const [revVerified, setRevVerified] = useState(true);
 
-  // Security Login Handler with sanitization & lockout protection
+  // Coupon Form State
+  const [couponCode, setCouponCode] = useState('');
+  const [couponName, setCouponName] = useState('Diwali Special');
+  const [couponType, setCouponType] = useState('percent'); // 'percent' or 'flat'
+  const [couponValue, setCouponValue] = useState(15);
+  const [couponMinOrder, setCouponMinOrder] = useState(999);
+
+  // Courier Edit Modal State
+  const [isCourierModalOpen, setIsCourierModalOpen] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [courierName, setCourierName] = useState('The Professional Couriers');
+  const [awbNumber, setAwbNumber] = useState('');
+
+  // Login Handler
   const handleLogin = (e) => {
     e.preventDefault();
     setAuthError('');
@@ -66,7 +84,6 @@ export default function AdminDashboard({
       return;
     }
 
-    // Secure credentials verification
     const cleanEmail = email.trim().toLowerCase();
     const cleanPassword = password.trim();
 
@@ -82,7 +99,7 @@ export default function AdminDashboard({
         setTimeout(() => setIsLocked(false), 60000);
         setAuthError('Too many failed attempts. Security lockout active for 60 seconds.');
       } else {
-        setAuthError(`Invalid credentials. (Attempt ${attempts} of 4). Hint: Use demo login below.`);
+        setAuthError(`Invalid credentials. (Attempt ${attempts} of 4). Hint: Use quick demo login.`);
       }
     }
   };
@@ -100,7 +117,7 @@ export default function AdminDashboard({
     onClose();
   };
 
-  // Open Edit Product Modal
+  // Product CRUD
   const handleOpenEditProduct = (p) => {
     setEditingProductId(p.id);
     setProdName(p.name);
@@ -133,7 +150,6 @@ export default function AdminDashboard({
     setIsProductModalOpen(true);
   };
 
-  // Save Product (Add or Edit)
   const handleSaveProduct = (e) => {
     e.preventDefault();
     if (!prodName.trim()) return;
@@ -194,7 +210,7 @@ export default function AdminDashboard({
     setIsProductModalOpen(false);
   };
 
-  // Add Review
+  // Review CRUD
   const handleSaveReview = (e) => {
     e.preventDefault();
     if (!revName.trim() || !revComment.trim()) return;
@@ -217,6 +233,55 @@ export default function AdminDashboard({
     setRevComment('');
   };
 
+  // Coupon CRUD
+  const handleCreateCoupon = (e) => {
+    e.preventDefault();
+    if (!couponCode.trim()) return;
+
+    onAddCoupon({
+      id: `coup-${Date.now()}`,
+      code: couponCode.trim().toUpperCase(),
+      name: couponName.trim() || 'Festival Offer',
+      type: couponType,
+      value: parseInt(couponValue) || 10,
+      minOrder: parseInt(couponMinOrder) || 499,
+      active: true
+    });
+
+    setCouponCode('');
+  };
+
+  // Courier Tracking Handler
+  const handleOpenCourierModal = (order) => {
+    setSelectedOrderId(order.id);
+    setCourierName(order.courierName || 'The Professional Couriers');
+    setAwbNumber(order.awbNumber || `TPC${Math.floor(10000000 + Math.random() * 90000000)}BLR`);
+    setIsCourierModalOpen(true);
+  };
+
+  const handleSaveCourierDetails = (e) => {
+    e.preventDefault();
+    onUpdateOrderCourier(selectedOrderId, {
+      courierName,
+      awbNumber,
+      status: 'Dispatched'
+    });
+    setIsCourierModalOpen(false);
+  };
+
+  const handleSendTrackingWhatsApp = (order) => {
+    const msg = `*HEECART PARCEL DISPATCH UPDATE*%0A%0A` +
+      `Dear ${order.customerName},%0A` +
+      `Your Heecart order *#${order.id}* has been dispatched successfully!%0A%0A` +
+      `• *Courier Partner:* ${order.courierName || 'The Professional Couriers'}%0A` +
+      `• *AWB Tracking No:* ${order.awbNumber || 'In transit'}%0A` +
+      `• *Items:* ${order.items}%0A%0A` +
+      `You can track live delivery directly on our website or on the courier portal.%0A` +
+      `Thank you for trusting Heecart! ❤️`;
+
+    window.open(`https://wa.me/91${order.phone}?text=${msg}`, '_blank');
+  };
+
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
       
@@ -230,7 +295,7 @@ export default function AdminDashboard({
             </div>
             <div>
               <h2 className="text-base sm:text-lg font-bold">Heecart Store Manager & CRM</h2>
-              <p className="text-[11px] text-red-100">Live store control for non-techie store owners</p>
+              <p className="text-[11px] text-red-100">Live store control for brother / non-techie owner</p>
             </div>
           </div>
 
@@ -238,7 +303,7 @@ export default function AdminDashboard({
             {isAuthenticated && (
               <button
                 onClick={handleLogout}
-                className="px-2.5 py-1 rounded bg-red-700 hover:bg-red-800 text-xs text-white font-medium flex items-center gap-1 transition-colors"
+                className="px-2.5 py-1 rounded bg-red-700 hover:bg-red-800 text-xs text-white font-medium flex items-center gap-1"
               >
                 <LogOut size={13} /> Log Out
               </button>
@@ -323,7 +388,7 @@ export default function AdminDashboard({
                 </button>
               </form>
 
-              {/* 1-Click Demo Login for brother */}
+              {/* 1-Click Access for brother */}
               <div className="p-4 rounded-xl bg-red-50/70 border border-red-200 text-center space-y-2">
                 <p className="text-xs font-bold text-red-900">
                   Quick Access For Store Owner:
@@ -351,7 +416,7 @@ export default function AdminDashboard({
                       activeTab === 'products' ? 'bg-red-600 text-white' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
                     }`}
                   >
-                    📦 Products Inventory ({products.length})
+                    📦 Products ({products.length})
                   </button>
                   <button
                     onClick={() => setActiveTab('reviews')}
@@ -359,7 +424,7 @@ export default function AdminDashboard({
                       activeTab === 'reviews' ? 'bg-red-600 text-white' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
                     }`}
                   >
-                    ⭐ Customer Reviews ({reviews.length})
+                    ⭐ Reviews ({reviews.length})
                   </button>
                   <button
                     onClick={() => setActiveTab('orders')}
@@ -367,13 +432,21 @@ export default function AdminDashboard({
                       activeTab === 'orders' ? 'bg-red-600 text-white' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
                     }`}
                   >
-                    📑 Orders & RFQ CRM ({orders.length})
+                    🚚 Courier & Orders CRM ({orders.length})
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('coupons')}
+                    className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors ${
+                      activeTab === 'coupons' ? 'bg-red-600 text-white' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+                    }`}
+                  >
+                    🎟️ Festival Coupons ({coupons?.length || 0})
                   </button>
                 </div>
 
                 <div className="flex items-center gap-1.5 text-[11px] text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200 font-semibold">
                   <CheckCircle2 size={13} />
-                  <span>Live Website Sync Active</span>
+                  <span>Live Store Sync Active</span>
                 </div>
               </div>
 
@@ -383,7 +456,7 @@ export default function AdminDashboard({
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="text-sm font-bold text-slate-900">Live Catalog Management</h3>
-                      <p className="text-xs text-slate-500">Add new gifts, change prices, update stock, and toggle Featured / Top Sales.</p>
+                      <p className="text-xs text-slate-500">Add products, update stock quantities, toggle Featured/Top Sales, and add reviews per product.</p>
                     </div>
 
                     <button
@@ -443,20 +516,30 @@ export default function AdminDashboard({
                                 )}
                               </div>
                             </td>
-                            <td className="p-3 text-right space-x-2">
+                            <td className="p-3 text-right space-x-1.5">
+                              <button
+                                onClick={() => {
+                                  setRevProductId(p.id);
+                                  setActiveTab('reviews');
+                                }}
+                                className="px-2 py-1 rounded bg-amber-50 text-amber-800 border border-amber-200 text-[10px] font-bold"
+                                title="Add customer review for this product"
+                              >
+                                + Review
+                              </button>
                               <button
                                 onClick={() => handleOpenEditProduct(p)}
                                 className="p-1.5 rounded text-blue-600 hover:bg-blue-50 font-semibold"
                                 title="Edit Product"
                               >
-                                <Edit2 size={14} />
+                                <Edit2 size={13} />
                               </button>
                               <button
                                 onClick={() => onDeleteProduct(p.id)}
                                 className="p-1.5 rounded text-red-600 hover:bg-red-50 font-semibold"
                                 title="Delete Product"
                               >
-                                <Trash2 size={14} />
+                                <Trash2 size={13} />
                               </button>
                             </td>
                           </tr>
@@ -468,14 +551,14 @@ export default function AdminDashboard({
                 </div>
               )}
 
-              {/* TAB 2: REVIEWS MANAGEMENT (Add on your own) */}
+              {/* TAB 2: REVIEWS MANAGEMENT (Add per product) */}
               {activeTab === 'reviews' && (
                 <div className="space-y-6">
                   
                   {/* Add New Review Box */}
                   <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
                     <h3 className="text-xs sm:text-sm font-bold text-slate-900">
-                      Add a New Verified Customer Review (Live in Store)
+                      Add a Customer Review Under a Specific Product
                     </h3>
 
                     <form onSubmit={handleSaveReview} className="space-y-3 text-xs">
@@ -487,7 +570,7 @@ export default function AdminDashboard({
                             required
                             value={revName}
                             onChange={(e) => setRevName(e.target.value)}
-                            placeholder="e.g. Anand Mahindra"
+                            placeholder="e.g. Ramesh Chandra"
                             className="w-full bg-slate-50 text-slate-900 px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-red-600 text-xs"
                           />
                         </div>
@@ -498,17 +581,17 @@ export default function AdminDashboard({
                             type="text"
                             value={revRole}
                             onChange={(e) => setRevRole(e.target.value)}
-                            placeholder="e.g. HR Manager / 1st Anniversary"
+                            placeholder="e.g. HR Manager / 5th Anniversary"
                             className="w-full bg-slate-50 text-slate-900 px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-red-600 text-xs"
                           />
                         </div>
 
                         <div>
-                          <label className="text-slate-600 font-semibold block mb-1">For Product</label>
+                          <label className="text-slate-600 font-semibold block mb-1">Select Specific Product*</label>
                           <select
                             value={revProductId}
                             onChange={(e) => setRevProductId(e.target.value)}
-                            className="w-full bg-slate-50 text-slate-900 px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-red-600 text-xs"
+                            className="w-full bg-slate-50 text-slate-900 px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-red-600 text-xs font-semibold"
                           >
                             {products.map(p => (
                               <option key={p.id} value={p.id}>{p.name}</option>
@@ -545,7 +628,7 @@ export default function AdminDashboard({
                       </div>
 
                       <div>
-                        <label className="text-slate-600 font-semibold block mb-1">Review Content / Testimonial*</label>
+                        <label className="text-slate-600 font-semibold block mb-1">Review Content / Story*</label>
                         <textarea
                           required
                           rows={2}
@@ -560,7 +643,7 @@ export default function AdminDashboard({
                         type="submit"
                         className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg text-xs"
                       >
-                        Publish Review Live
+                        Publish Review Under Product
                       </button>
                     </form>
                   </div>
@@ -589,7 +672,7 @@ export default function AdminDashboard({
                               ))}
                             </div>
                             <p className="text-slate-600 leading-relaxed">"{r.comment}"</p>
-                            <span className="text-[10px] text-slate-400 block">Product: {r.productName || 'Heecart Gift'} • {r.date}</span>
+                            <span className="text-[10px] text-red-600 font-semibold block">Under Product: {r.productName || 'Heecart Gift'} • {r.date}</span>
                           </div>
 
                           <button
@@ -607,13 +690,13 @@ export default function AdminDashboard({
                 </div>
               )}
 
-              {/* TAB 3: ORDERS & INQUIRIES CRM */}
+              {/* TAB 3: COURIER & ORDERS CRM */}
               {activeTab === 'orders' && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-sm font-bold text-slate-900">Customer Orders & Bulk RFQs</h3>
-                      <p className="text-xs text-slate-500">Manage pipeline stages and 1-click WhatsApp customer messaging.</p>
+                      <h3 className="text-sm font-bold text-slate-900">Courier Dispatch & Customer CRM</h3>
+                      <p className="text-xs text-slate-500">Assign courier partners (The Professional Couriers, BlueDart, Delhivery), update AWB tracking IDs, and WhatsApp tracking links to customers.</p>
                     </div>
                   </div>
 
@@ -622,10 +705,11 @@ export default function AdminDashboard({
                       <thead className="bg-slate-100 text-slate-700 uppercase font-bold text-[10px] border-b border-slate-200">
                         <tr>
                           <th className="p-3">Order ID & Date</th>
-                          <th className="p-3">Customer & Company</th>
-                          <th className="p-3">Items & Amount</th>
-                          <th className="p-3">Status Pipeline</th>
-                          <th className="p-3 text-right">Direct Action</th>
+                          <th className="p-3">Customer & Contact</th>
+                          <th className="p-3">Items & Value</th>
+                          <th className="p-3">Courier & AWB Tracking</th>
+                          <th className="p-3">Pipeline Status</th>
+                          <th className="p-3 text-right">Actions</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100">
@@ -637,20 +721,31 @@ export default function AdminDashboard({
                             </td>
                             <td className="p-3">
                               <p className="font-bold text-slate-900">{ord.customerName}</p>
-                              <p className="text-[10px] text-slate-500">{ord.phone} • {ord.company}</p>
+                              <p className="text-[10px] text-slate-500">+91 {ord.phone} • {ord.city}</p>
                             </td>
                             <td className="p-3">
-                              <p className="font-semibold text-slate-800">{ord.items}</p>
+                              <p className="font-semibold text-slate-800 line-clamp-1 max-w-[150px]">{ord.items}</p>
                               <span className="text-red-600 font-bold">₹{ord.amount?.toLocaleString('en-IN')}</span>
+                            </td>
+                            <td className="p-3">
+                              <div className="space-y-0.5">
+                                <p className="font-bold text-slate-900 flex items-center gap-1">
+                                  <Truck size={12} className="text-red-600" />
+                                  <span>{ord.courierName || 'The Professional Couriers'}</span>
+                                </p>
+                                <span className="font-mono text-[10px] text-slate-500 font-bold bg-slate-100 px-1 py-0.2 rounded">
+                                  {ord.awbNumber || 'Assign AWB'}
+                                </span>
+                              </div>
                             </td>
                             <td className="p-3">
                               <select
                                 value={ord.status}
                                 onChange={(e) => onUpdateOrderStatus(ord.id, e.target.value)}
-                                className={`px-2 py-1 rounded text-[11px] font-bold border ${
+                                className={`px-2 py-1 rounded text-[10px] font-bold border ${
                                   ord.status === 'Delivered' ? 'bg-emerald-50 text-emerald-800 border-emerald-300' :
-                                  ord.status === 'In Production' ? 'bg-amber-50 text-amber-800 border-amber-300' :
-                                  'bg-blue-50 text-blue-800 border-blue-300'
+                                  ord.status === 'Dispatched' ? 'bg-blue-50 text-blue-800 border-blue-300' :
+                                  'bg-amber-50 text-amber-800 border-amber-300'
                                 }`}
                               >
                                 <option value="New Inquiry">New Inquiry</option>
@@ -661,20 +756,158 @@ export default function AdminDashboard({
                                 <option value="Delivered">Delivered</option>
                               </select>
                             </td>
-                            <td className="p-3 text-right">
-                              <a
-                                href={`https://wa.me/91${ord.phone}?text=Hi%20${encodeURIComponent(ord.customerName)},%20this%20is%20Heecart%20Studio%20regarding%20your%20order%20${ord.id}%20(${encodeURIComponent(ord.items)})!`}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px]"
+                            <td className="p-3 text-right space-y-1">
+                              <button
+                                onClick={() => handleOpenCourierModal(ord)}
+                                className="px-2 py-1 rounded bg-slate-800 hover:bg-slate-900 text-white font-bold text-[10px] block w-full text-center"
                               >
-                                <MessageSquare size={12} /> WhatsApp Customer
-                              </a>
+                                Edit Courier AWB
+                              </button>
+                              <button
+                                onClick={() => handleSendTrackingWhatsApp(ord)}
+                                className="px-2 py-1 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] block w-full text-center"
+                              >
+                                WhatsApp AWB
+                              </button>
                             </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
+                  </div>
+
+                </div>
+              )}
+
+              {/* TAB 4: FESTIVAL COUPONS MANAGER */}
+              {activeTab === 'coupons' && (
+                <div className="space-y-6">
+                  
+                  {/* Create New Festival Coupon */}
+                  <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <h3 className="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-2">
+                      <Percent size={16} className="text-red-600" />
+                      <span>Create Festival / Seasonal Promo Coupon</span>
+                    </h3>
+
+                    <form onSubmit={handleCreateCoupon} className="space-y-3 text-xs">
+                      <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                        <div>
+                          <label className="text-slate-600 font-semibold block mb-1">Coupon Code*</label>
+                          <input
+                            type="text"
+                            required
+                            value={couponCode}
+                            onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                            placeholder="e.g. DIWALI20"
+                            className="w-full bg-slate-50 text-slate-900 px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-red-600 text-xs font-mono font-bold uppercase"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-slate-600 font-semibold block mb-1">Festival / Campaign Name</label>
+                          <input
+                            type="text"
+                            value={couponName}
+                            onChange={(e) => setCouponName(e.target.value)}
+                            placeholder="e.g. Diwali Dhamaka"
+                            className="w-full bg-slate-50 text-slate-900 px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-red-600 text-xs"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-slate-600 font-semibold block mb-1">Discount Type</label>
+                          <select
+                            value={couponType}
+                            onChange={(e) => setCouponType(e.target.value)}
+                            className="w-full bg-slate-50 text-slate-900 px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-red-600 text-xs font-semibold"
+                          >
+                            <option value="percent">Percentage Off (%)</option>
+                            <option value="flat">Flat Amount Off (₹)</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="text-slate-600 font-semibold block mb-1">
+                            Discount Value ({couponType === 'percent' ? '%' : '₹'})*
+                          </label>
+                          <input
+                            type="number"
+                            required
+                            value={couponValue}
+                            onChange={(e) => setCouponValue(e.target.value)}
+                            placeholder="15"
+                            className="w-full bg-slate-50 text-slate-900 px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-red-600 text-xs font-bold"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between pt-1">
+                        <div className="flex items-center gap-2">
+                          <label className="text-slate-600 font-medium">Min Order Amount (₹):</label>
+                          <input
+                            type="number"
+                            value={couponMinOrder}
+                            onChange={(e) => setCouponMinOrder(e.target.value)}
+                            className="w-24 bg-slate-50 text-slate-900 px-2 py-1 rounded border border-slate-300 text-xs"
+                          />
+                        </div>
+
+                        <button
+                          type="submit"
+                          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg text-xs"
+                        >
+                          Create Live Coupon
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+
+                  {/* Active Coupons List */}
+                  <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                    <div className="p-3 bg-slate-100 border-b border-slate-200 font-bold text-xs text-slate-700">
+                      Active Festival Coupons ({coupons?.length || 0})
+                    </div>
+                    <div className="divide-y divide-slate-100">
+                      {coupons?.map(c => (
+                        <div key={c.id} className="p-4 flex items-center justify-between text-xs">
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-lg bg-red-100 text-red-600 flex items-center justify-center font-bold">
+                              <Tag size={16} />
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-mono font-black text-sm text-slate-900">{c.code}</span>
+                                <span className={`px-2 py-0.2 rounded text-[10px] font-bold ${
+                                  c.active ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-600'
+                                }`}>
+                                  {c.active ? 'Active' : 'Disabled'}
+                                </span>
+                              </div>
+                              <p className="text-slate-500 text-[11px] mt-0.5">
+                                {c.name} • {c.type === 'percent' ? `${c.value}% Off` : `₹${c.value} Flat Off`} on orders above ₹{c.minOrder}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => onToggleCoupon(c.id)}
+                              className="px-2.5 py-1 rounded border border-slate-300 text-[11px] font-semibold text-slate-700 hover:bg-slate-50"
+                            >
+                              {c.active ? 'Pause' : 'Activate'}
+                            </button>
+                            <button
+                              onClick={() => onDeleteCoupon(c.id)}
+                              className="p-1.5 text-red-600 hover:bg-red-50 rounded"
+                              title="Delete coupon"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
                 </div>
@@ -686,6 +919,63 @@ export default function AdminDashboard({
         </div>
 
       </div>
+
+      {/* Edit Courier Modal */}
+      {isCourierModalOpen && (
+        <div className="fixed inset-0 z-60 bg-black/70 flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-white rounded-xl border border-slate-300 shadow-2xl p-5 space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
+              <h3 className="text-sm font-bold text-slate-900">Update Courier Dispatch Details</h3>
+              <button onClick={() => setIsCourierModalOpen(false)} className="font-bold text-slate-400">✕</button>
+            </div>
+
+            <form onSubmit={handleSaveCourierDetails} className="space-y-3 text-xs">
+              <div>
+                <label className="text-slate-700 font-semibold block mb-1">Courier Logistics Partner*</label>
+                <select
+                  value={courierName}
+                  onChange={(e) => setCourierName(e.target.value)}
+                  className="w-full bg-slate-50 text-slate-900 px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-red-600 text-xs font-semibold"
+                >
+                  <option value="The Professional Couriers">The Professional Couriers (TPC)</option>
+                  <option value="BlueDart Express Air">BlueDart Express Air</option>
+                  <option value="Delhivery Surface / Express">Delhivery Surface / Express</option>
+                  <option value="DTDC Express Logistics">DTDC Express Logistics</option>
+                  <option value="India Post Speed Post">India Post Speed Post</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-slate-700 font-semibold block mb-1">AWB Consignment / Tracking Number*</label>
+                <input
+                  type="text"
+                  required
+                  value={awbNumber}
+                  onChange={(e) => setAwbNumber(e.target.value)}
+                  placeholder="e.g. TPC84920194BLR"
+                  className="w-full bg-slate-50 text-slate-900 px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-red-600 text-xs font-mono font-bold"
+                />
+              </div>
+
+              <div className="pt-2 flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsCourierModalOpen(false)}
+                  className="px-3 py-1.5 rounded-lg border border-slate-300 text-slate-600 font-semibold text-xs"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-bold text-xs"
+                >
+                  Save & Update Tracking
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Product Add / Edit Modal */}
       {isProductModalOpen && (

@@ -279,6 +279,36 @@ export const INITIAL_PRODUCTS = [
   }
 ];
 
+export const INITIAL_COUPONS = [
+  {
+    id: 'coup-1',
+    code: 'HEECART10',
+    name: 'Welcome Discount',
+    type: 'percent', // 'percent' or 'flat'
+    value: 10, // 10%
+    minOrder: 499,
+    active: true
+  },
+  {
+    id: 'coup-2',
+    code: 'DIWALI20',
+    name: 'Diwali Festive Dhamaka',
+    type: 'percent',
+    value: 20,
+    minOrder: 1499,
+    active: true
+  },
+  {
+    id: 'coup-3',
+    code: 'BULKFREE',
+    name: 'Free Express Shipping',
+    type: 'flat',
+    value: 99,
+    minOrder: 799,
+    active: true
+  }
+];
+
 export const INITIAL_REVIEWS = [
   {
     id: 'rev-1',
@@ -327,7 +357,10 @@ export const INITIAL_ORDERS = [
     status: 'In Production',
     date: '27 Oct 2026',
     city: 'Bengaluru, Karnataka',
-    type: 'Corporate'
+    type: 'Corporate',
+    courierName: 'The Professional Couriers',
+    awbNumber: 'TPC84920194BLR',
+    trackingUrl: 'https://www.tpcindia.com/'
   },
   {
     id: 'HEEC-8919',
@@ -335,12 +368,15 @@ export const INITIAL_ORDERS = [
     phone: '9820194829',
     email: 'ananya.s@outlook.com',
     company: 'Personal',
-    items: 'Heritage Mosaic Photo Frame (1 unit)',
+    items: 'Custom Mosaic Photo Collage Frame (1 unit)',
     amount: 1199,
     status: 'Dispatched',
     date: '26 Oct 2026',
     city: 'Mumbai, Maharashtra',
-    type: 'Personal'
+    type: 'Personal',
+    courierName: 'BlueDart Express Air',
+    awbNumber: 'BD839104829IN',
+    trackingUrl: 'https://www.bluedart.com/'
   },
   {
     id: 'HEEC-8890',
@@ -353,17 +389,80 @@ export const INITIAL_ORDERS = [
     status: 'Mockup Approved',
     date: '25 Oct 2026',
     city: 'Chennai, Tamil Nadu',
-    type: 'Corporate'
+    type: 'Corporate',
+    courierName: 'Delhivery Surface',
+    awbNumber: 'DEL9948102948',
+    trackingUrl: 'https://www.delhivery.com/'
   }
 ];
 
 export const CATEGORIES = [
-  { id: 'all', name: 'All Collections' },
-  { id: 'hampers', name: 'Hampers & Gift Sets' },
-  { id: 'bottles', name: 'Drinkware & Bottles' },
-  { id: 'frames', name: 'Photo Frames & Keepsakes' },
-  { id: 'stationery', name: 'Desk Accessories & Pens' },
-  { id: 'combos', name: 'Combo Gifts' }
+  { 
+    id: 'all', 
+    name: 'All Products',
+    heroTitle: 'Personalized Gifts & Custom Corporate Hampers',
+    heroSubtitle: 'Custom laser engraving on drinkware, executive diaries, luxury gift hampers & photo frames. Free digital mockup sent on WhatsApp before printing.',
+    heroBadge: 'Bestseller Corporate Hamper',
+    heroImage: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=1000&auto=format&fit=crop',
+    featuredProductTitle: 'The Royale Executive Hamper',
+    featuredPrice: '₹1,899',
+    featuredBulk: 'Bulk: ₹1,099'
+  },
+  { 
+    id: 'hampers', 
+    name: 'Hampers & Gift Sets',
+    heroTitle: 'Curated Corporate Hampers & Onboarding Kits',
+    heroSubtitle: 'Leave a lasting impression on your employees and VIP clients. Premium rigid gift chests with laser-engraved smart flasks, diaries, and gourmet treats.',
+    heroBadge: 'Top Enterprise Choice',
+    heroImage: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=1000&auto=format&fit=crop',
+    featuredProductTitle: 'The Royale Onboarding Suite',
+    featuredPrice: '₹1,899',
+    featuredBulk: 'Slabs from ₹1,099/pc'
+  },
+  { 
+    id: 'bottles', 
+    name: 'Drinkware & Bottles',
+    heroTitle: 'Smart LED Temperature Bottles & Steel Tumblers',
+    heroSubtitle: 'SUS304 food-grade double-walled vacuum flasks with touch LCD temperature caps. Laser engraved with individual employee names or company emblems.',
+    heroBadge: '50,000+ Touches LCD',
+    heroImage: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=1000&auto=format&fit=crop',
+    featuredProductTitle: 'Smart LED Temp Bottle (500ml)',
+    featuredPrice: '₹599',
+    featuredBulk: 'Bulk: ₹329/pc'
+  },
+  { 
+    id: 'frames', 
+    name: 'Photo Frames & Keepsakes',
+    heroTitle: 'Handcrafted Mosaic Photo Frames & Spotify Plaques',
+    heroSubtitle: 'Preserve your family milestones, weddings, and anniversaries with museum-grade UV matte laminated photo frames and glowing optical acrylic plaques.',
+    heroBadge: 'Top Anniversary Gift',
+    heroImage: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=1000&auto=format&fit=crop',
+    featuredProductTitle: 'Heritage 50-Photo Mosaic Frame',
+    featuredPrice: '₹1,199',
+    featuredBulk: 'Free WhatsApp Proof'
+  },
+  { 
+    id: 'stationery', 
+    name: 'Desk Accessories & Pens',
+    heroTitle: 'Executive Leather Journals & Heavy Metal Pens',
+    heroSubtitle: 'Boardroom-ready PU leather notebooks with magnetic clasps, weighted metal twist rollerballs, and matching zinc alloy keychains custom debossed.',
+    heroBadge: 'Corporate Conference Hit',
+    heroImage: 'https://images.unsplash.com/photo-1585336261026-6d60cfa5c2c7?q=80&w=1000&auto=format&fit=crop',
+    featuredProductTitle: 'Executive Diary & Pen Trio',
+    featuredPrice: '₹899',
+    featuredBulk: 'Bulk: ₹479/pc'
+  },
+  { 
+    id: 'combos', 
+    name: 'Combo Gifts',
+    heroTitle: 'Personalized Leather Wallets & Keychain Combos',
+    heroSubtitle: 'RFID-protected leather wallets debossed with names or monograms paired with laser-etched stainless steel keychains in luxury presentation boxes.',
+    heroBadge: 'Perfect Milestone Gift',
+    heroImage: 'https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=1000&auto=format&fit=crop',
+    featuredProductTitle: 'Gentleman’s RFID Wallet & Key Duo',
+    featuredPrice: '₹799',
+    featuredBulk: 'Dispatched in 24 Hrs'
+  }
 ];
 
 export const FAQS = [
@@ -376,12 +475,12 @@ export const FAQS = [
     a: 'Yes, we provide transparent slab pricing starting from 25 units up to 1,000+ units, with up to 45% discount. You can also request a physical branded sample piece with your company logo before ordering in bulk.'
   },
   {
-    q: 'Can you deliver hampers directly to employees at multiple addresses across India?',
-    a: 'Yes! You can share an Excel/CSV file with individual employee home addresses and pin codes. We pack and courier each gift box safely with individual tracking numbers.'
+    q: 'How does your automated courier tracking work?',
+    a: 'Once we dispatch your parcel via The Professional Couriers, BlueDart, or Delhivery, we update your AWB tracking number in our system. You can enter your Order ID directly on our website to see live status or click to view tracking on the official courier portal.'
   },
   {
-    q: 'What is the dispatch and delivery timeline?',
-    a: 'Standard orders and hampers are crafted and dispatched within 24 to 48 hours following mockup approval. We ship via BlueDart and Delhivery Express Air, reaching metros in 2-3 days and other regions in 3-5 days.'
+    q: 'Can you deliver hampers directly to employees at multiple addresses across India?',
+    a: 'Yes! You can share an Excel/CSV file with individual employee home addresses and pin codes. We pack and courier each gift box safely with individual tracking numbers.'
   },
   {
     q: 'What is your transit replacement warranty?',

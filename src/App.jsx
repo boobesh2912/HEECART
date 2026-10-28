@@ -14,11 +14,13 @@ import InstagramShowcase from './components/InstagramShowcase';
 import FAQSection from './components/FAQSection';
 import Footer from './components/Footer';
 import AdminDashboard from './components/AdminDashboard';
-import { INITIAL_PRODUCTS, INITIAL_REVIEWS, INITIAL_ORDERS, CATEGORIES } from './data/products';
+import MobileBottomNav from './components/MobileBottomNav';
+import AuthOtpModal from './components/AuthOtpModal';
+import { INITIAL_PRODUCTS, INITIAL_REVIEWS, INITIAL_ORDERS, INITIAL_COUPONS, CATEGORIES } from './data/products';
 import { SlidersHorizontal, Check, Award, Lock, Sparkles, Filter } from 'lucide-react';
 
 export default function App() {
-  // Products, Reviews, and Orders with LocalStorage persistence
+  // Products, Reviews, Orders and Coupons with LocalStorage persistence
   const [products, setProducts] = useState(() => {
     try {
       const saved = localStorage.getItem('heecart_live_products');
@@ -46,24 +48,50 @@ export default function App() {
     }
   });
 
-  // Save to LocalStorage whenever modified by Admin or customer
-  useEffect(() => {
+  const [coupons, setCoupons] = useState(() => {
     try {
-      localStorage.setItem('heecart_live_products', JSON.stringify(products));
-    } catch (e) {}
+      const saved = localStorage.getItem('heecart_live_coupons');
+      return saved ? JSON.parse(saved) : INITIAL_COUPONS;
+    } catch (e) {
+      return INITIAL_COUPONS;
+    }
+  });
+
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('heecart_user_auth');
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  // LocalStorage sync
+  useEffect(() => {
+    try { localStorage.setItem('heecart_live_products', JSON.stringify(products)); } catch (e) {}
   }, [products]);
 
   useEffect(() => {
-    try {
-      localStorage.setItem('heecart_live_reviews', JSON.stringify(reviews));
-    } catch (e) {}
+    try { localStorage.setItem('heecart_live_reviews', JSON.stringify(reviews)); } catch (e) {}
   }, [reviews]);
 
   useEffect(() => {
-    try {
-      localStorage.setItem('heecart_live_orders', JSON.stringify(orders));
-    } catch (e) {}
+    try { localStorage.setItem('heecart_live_orders', JSON.stringify(orders)); } catch (e) {}
   }, [orders]);
+
+  useEffect(() => {
+    try { localStorage.setItem('heecart_live_coupons', JSON.stringify(coupons)); } catch (e) {}
+  }, [coupons]);
+
+  useEffect(() => {
+    try { 
+      if (currentUser) {
+        localStorage.setItem('heecart_user_auth', JSON.stringify(currentUser));
+      } else {
+        localStorage.removeItem('heecart_user_auth');
+      }
+    } catch (e) {}
+  }, [currentUser]);
 
   // View state: 'home' or 'product-page'
   const [currentView, setCurrentView] = useState('home');
@@ -98,6 +126,7 @@ export default function App() {
   const [isTrackingOpen, setIsTrackingOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [checkoutData, setCheckoutData] = useState(null);
   const [toastMessage, setToastMessage] = useState('');
 
@@ -166,6 +195,30 @@ export default function App() {
   const handleUpdateOrderStatus = (orderId, newStatus) => {
     setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
     showToast(`Order #${orderId} status set to ${newStatus}`);
+  };
+
+  const handleUpdateOrderCourier = (orderId, courierData) => {
+    setOrders(prev => prev.map(o => o.id === orderId ? { ...o, ...courierData } : o));
+    showToast(`Courier tracking assigned for Order #${orderId}`);
+  };
+
+  const handleAddCoupon = (newCoupon) => {
+    setCoupons(prev => [newCoupon, ...prev]);
+    showToast(`Festival coupon ${newCoupon.code} created!`);
+  };
+
+  const handleDeleteCoupon = (couponId) => {
+    setCoupons(prev => prev.filter(c => c.id !== couponId));
+    showToast('Coupon removed.');
+  };
+
+  const handleToggleCoupon = (couponId) => {
+    setCoupons(prev => prev.map(c => c.id === couponId ? { ...c, active: !c.active } : c));
+    showToast('Coupon status updated.');
+  };
+
+  const handleSaveCustomerLead = (lead) => {
+    setOrders(prev => [lead, ...prev]);
   };
 
   // Open Dedicated Product Page
@@ -240,12 +293,14 @@ export default function App() {
     return (b.reviewsCount || 0) - (a.reviewsCount || 0);
   });
 
+  const cartTotalAmount = cart.reduce((acc, i) => acc + i.totalPrice, 0);
+
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col font-sans selection:bg-red-600 selection:text-white">
+    <div className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col font-sans selection:bg-red-600 selection:text-white pb-16 md:pb-0">
       
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-lg bg-slate-900 text-white text-xs font-bold shadow-xl border border-slate-700 animate-fadeIn">
+        <div className="fixed bottom-20 md:bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-lg bg-slate-900 text-white text-xs font-bold shadow-xl border border-slate-700 animate-fadeIn">
           <Check size={15} className="text-emerald-400" />
           <span>{toastMessage}</span>
         </div>
@@ -258,6 +313,8 @@ export default function App() {
         onOpenTracking={() => setIsTrackingOpen(true)}
         onOpenCorporateRFQ={handleScrollToCorporate}
         onOpenAdmin={() => setIsAdminOpen(true)}
+        onOpenAuth={() => setIsAuthOpen(true)}
+        currentUser={currentUser}
         selectedCategory={selectedCategory}
         onSelectCategory={(cat) => {
           setSelectedCategory(cat);
@@ -280,7 +337,9 @@ export default function App() {
       ) : (
         /* Home View (Printmine style) */
         <>
+          {/* Dynamic Hero Section that changes based on selected category! */}
           <Hero
+            selectedCategory={selectedCategory}
             onExploreClick={handleScrollToProducts}
             onCorporateClick={handleScrollToCorporate}
           />
@@ -401,6 +460,16 @@ export default function App() {
         onOpenAdmin={() => setIsAdminOpen(true)}
       />
 
+      {/* Sticky Mobile Bottom Navigation Bar (like Blinkit / Zepto) */}
+      <MobileBottomNav
+        cartCount={cart.reduce((acc, item) => acc + item.quantity, 0)}
+        cartTotal={cartTotalAmount}
+        onOpenCart={() => setIsCartOpen(true)}
+        onOpenTracking={() => setIsTrackingOpen(true)}
+        onGoHome={handleGoHome}
+        onOpenCategories={handleScrollToProducts}
+      />
+
       {/* Modals */}
       <ProductCustomizerModal
         product={customizerProduct}
@@ -419,6 +488,7 @@ export default function App() {
           setCheckoutData(data);
           setIsCheckoutOpen(true);
         }}
+        coupons={coupons}
       />
 
       <CheckoutModal
@@ -427,15 +497,15 @@ export default function App() {
         checkoutData={checkoutData}
         onOrderSuccess={() => {
           setCart([]);
-          try {
-            localStorage.removeItem('heecart_bag');
-          } catch (e) {}
+          try { localStorage.removeItem('heecart_bag'); } catch (e) {}
         }}
+        onSaveCustomerLead={handleSaveCustomerLead}
       />
 
       <OrderTrackingModal
         isOpen={isTrackingOpen}
         onClose={() => setIsTrackingOpen(false)}
+        orders={orders}
       />
 
       {/* Store Admin & CRM Dashboard */}
@@ -451,6 +521,26 @@ export default function App() {
         onDeleteReview={handleDeleteReview}
         orders={orders}
         onUpdateOrderStatus={handleUpdateOrderStatus}
+        onUpdateOrderCourier={handleUpdateOrderCourier}
+        coupons={coupons}
+        onAddCoupon={handleAddCoupon}
+        onDeleteCoupon={handleDeleteCoupon}
+        onToggleCoupon={handleToggleCoupon}
+      />
+
+      {/* Mobile OTP Auth Modal */}
+      <AuthOtpModal
+        isOpen={isAuthOpen}
+        onClose={() => setIsAuthOpen(false)}
+        user={currentUser}
+        onLoginSuccess={(usr) => {
+          setCurrentUser(usr);
+          showToast(`Welcome back, ${usr.name}!`);
+        }}
+        onLogout={() => {
+          setCurrentUser(null);
+          showToast('Logged out successfully.');
+        }}
       />
 
     </div>

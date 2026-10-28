@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Search, Truck, Menu, X, Shield, Lock, Award, MessageCircle } from 'lucide-react';
+import { ShoppingBag, Search, Truck, Menu, X, Shield, Lock, Award, MessageCircle, User } from 'lucide-react';
 
 export default function Navbar({
   cartCount,
@@ -7,6 +7,8 @@ export default function Navbar({
   onOpenTracking,
   onOpenCorporateRFQ,
   onOpenAdmin,
+  onOpenAuth,
+  currentUser,
   selectedCategory,
   onSelectCategory,
   searchQuery,
@@ -26,16 +28,23 @@ export default function Navbar({
               Notice
             </span>
             <span className="truncate text-[11px] sm:text-xs">
-              Fast 24-48 Hr Dispatch | Free Digital Mockup on WhatsApp | Use code <strong className="underline">HEECART10</strong> for 10% Off
+              Fast 24-48 Hr Dispatch | Free Digital Mockup on WhatsApp | Use code <strong className="underline font-bold">HEECART10</strong>
             </span>
           </div>
 
-          <div className="hidden md:flex items-center space-x-5 text-[11px]">
+          <div className="hidden md:flex items-center space-x-4 text-[11px]">
             <button
               onClick={onOpenTracking}
               className="hover:underline flex items-center gap-1 font-semibold"
             >
-              <Truck size={13} /> Track Order
+              <Truck size={13} /> Track Courier
+            </button>
+            <span>|</span>
+            <button
+              onClick={onOpenAuth}
+              className="hover:underline flex items-center gap-1 font-semibold"
+            >
+              <User size={13} /> {currentUser ? `Hi, ${currentUser.name.split(' ')[0]}` : 'Login / Signup'}
             </button>
             <span>|</span>
             <button
@@ -102,7 +111,7 @@ export default function Navbar({
           </div>
 
           {/* Right Action Icons & Buttons */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             
             {/* WhatsApp Support CTA */}
             <a
@@ -247,6 +256,16 @@ export default function Navbar({
           </div>
 
           <div className="pt-3 border-t border-slate-100 space-y-2">
+            <button
+              onClick={() => {
+                onOpenAuth();
+                setMobileMenuOpen(false);
+              }}
+              className="w-full text-left px-3 py-2 text-xs text-slate-700 font-semibold flex items-center gap-2"
+            >
+              <User size={14} className="text-red-600" />
+              <span>{currentUser ? `Account (${currentUser.name})` : 'Login / Signup with OTP'}</span>
+            </button>
             <button
               onClick={() => {
                 onOpenTracking();

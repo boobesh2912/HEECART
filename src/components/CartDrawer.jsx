@@ -1,32 +1,57 @@
 import React, { useState } from 'react';
-import { X, Trash2, ShoppingBag, ArrowRight, ShieldCheck, Tag, Truck, MessageSquare } from 'lucide-react';
+import { X, Trash2, ShoppingBag, ArrowRight, ShieldCheck, Tag, Truck, MessageSquare, Check } from 'lucide-react';
 
-export default function CartDrawer({ isOpen, onClose, cart, onUpdateQuantity, onRemoveItem, onProceedToCheckout }) {
+export default function CartDrawer({ 
+  isOpen, 
+  onClose, 
+  cart, 
+  onUpdateQuantity, 
+  onRemoveItem, 
+  onProceedToCheckout,
+  coupons = [] 
+}) {
   if (!isOpen) return null;
 
   const [promoCode, setPromoCode] = useState('');
-  const [discountPercent, setDiscountPercent] = useState(0);
-  const [promoApplied, setPromoApplied] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [promoError, setPromoError] = useState('');
 
   const rawSubtotal = cart.reduce((acc, item) => acc + item.totalPrice, 0);
   const freeShippingThreshold = 999;
-  const isFreeShipping = rawSubtotal >= freeShippingThreshold || promoApplied === 'BULKFREE';
+  const isFreeShipping = rawSubtotal >= freeShippingThreshold || appliedCoupon?.code === 'BULKFREE';
   const shippingFee = isFreeShipping || rawSubtotal === 0 ? 0 : 99;
 
-  const discountAmount = Math.round((rawSubtotal * discountPercent) / 100);
+  // Calculate discount based on dynamic coupon
+  let discountAmount = 0;
+  if (appliedCoupon) {
+    if (appliedCoupon.type === 'percent') {
+      discountAmount = Math.round((rawSubtotal * appliedCoupon.value) / 100);
+    } else {
+      discountAmount = appliedCoupon.value;
+    }
+  }
+
   const finalTotal = Math.max(0, rawSubtotal - discountAmount + shippingFee);
 
   const handleApplyPromo = (e) => {
     e.preventDefault();
     setPromoError('');
-    if (promoCode.trim().toUpperCase() === 'HEECART10') {
-      setDiscountPercent(10);
-      setPromoApplied('HEECART10 (10% Off)');
-    } else if (promoCode.trim().toUpperCase() === 'BULKFREE') {
-      setPromoApplied('BULKFREE (Free Delivery)');
+    const code = promoCode.trim().toUpperCase();
+    if (!code) return;
+
+    // Search active coupons created by admin
+    const matched = coupons.find(c => c.code === code && c.active);
+
+    if (matched) {
+      if (rawSubtotal < matched.minOrder) {
+        setPromoError(`Minimum order value for ${code} is ₹${matched.minOrder}.`);
+      } else {
+        setAppliedCoupon(matched);
+      }
+    } else if (code === 'HEECART10') {
+      setAppliedCoupon({ code: 'HEECART10', name: 'Welcome 10%', type: 'percent', value: 10, minOrder: 499 });
     } else {
-      setPromoError('Invalid coupon. Try code HEECART10');
+      setPromoError('Invalid coupon. Try code HEECART10 or check active offers.');
     }
   };
 
@@ -44,7 +69,7 @@ export default function CartDrawer({ isOpen, onClose, cart, onUpdateQuantity, on
     });
     msg += `*Subtotal:* ₹${rawSubtotal}%0A` +
       `*Shipping:* ${shippingFee === 0 ? 'FREE' : '₹' + shippingFee}%0A` +
-      (discountAmount > 0 ? `*Discount (${promoApplied}):* -₹${discountAmount}%0A` : '') +
+      (discountAmount > 0 ? `*Discount (${appliedCoupon?.code}):* -₹${discountAmount}%0A` : '') +
       `*Total Order Value:* ₹${finalTotal}%0A%0A` +
       `_Please confirm availability and share mockups for review!_`;
 
@@ -182,7 +207,7 @@ export default function CartDrawer({ isOpen, onClose, cart, onUpdateQuantity, on
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value)}
                   placeholder="Coupon: HEECART10"
-                  className="flex-1 bg-slate-50 text-slate-900 text-xs px-3 py-1.5 rounded-lg border border-slate-300 uppercase focus:outline-none focus:border-red-600"
+                  className="flex-1 bg-slate-50 text-slate-900 text-xs px-3 py-1.5 rounded-lg border border-slate-300 uppercase focus:outline-none focus:border-red-600 font-mono font-bold"
                 />
                 <button
                   type="submit"
@@ -192,8 +217,13 @@ export default function CartDrawer({ isOpen, onClose, cart, onUpdateQuantity, on
                 </button>
               </form>
 
-              {promoApplied && <p className="text-[10px] text-emerald-700 font-semibold">✓ {promoApplied}</p>}
-              {promoError && <p className="text-[10px] text-red-600">{promoError}</p>}
+              {appliedCoupon && (
+                <div className="p-2 bg-emerald-50 rounded border border-emerald-200 flex items-center justify-between text-[11px] text-emerald-800">
+                  <span className="font-semibold">✓ Coupon {appliedCoupon.code} applied ({appliedCoupon.type === 'percent' ? `${appliedCoupon.value}% Off` : `₹${appliedCoupon.value} Off`})</span>
+                  <button onClick={() => setAppliedCoupon(null)} className="text-slate-400 hover:text-slate-600 font-bold ml-2">✕</button>
+                </div>
+              )}
+              {promoError && <p className="text-[10px] text-red-600 font-semibold">{promoError}</p>}
 
               {/* Price lines */}
               <div className="space-y-1 text-xs text-slate-600 pt-1">
@@ -203,12 +233,12 @@ export default function CartDrawer({ isOpen, onClose, cart, onUpdateQuantity, on
                 </div>
                 {discountAmount > 0 && (
                   <div className="flex justify-between text-emerald-700 font-semibold">
-                    <span>Discount:</span>
+                    <span>Festival Discount:</span>
                     <span>- ₹{discountAmount.toLocaleString('en-IN')}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <span>Delivery:</span>
+                  <span>Pan-India Delivery:</span>
                   <span className={shippingFee === 0 ? 'text-emerald-700 font-bold' : 'text-slate-900 font-medium'}>
                     {shippingFee === 0 ? 'FREE' : `₹${shippingFee}`}
                   </span>
@@ -230,12 +260,12 @@ export default function CartDrawer({ isOpen, onClose, cart, onUpdateQuantity, on
                       discountAmount,
                       shippingFee,
                       finalTotal,
-                      promoApplied
+                      promoApplied: appliedCoupon ? appliedCoupon.code : ''
                     });
                   }}
                   className="w-full py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm"
                 >
-                  <span>Proceed to Checkout</span>
+                  <span>Submit Details & Proceed</span>
                   <ArrowRight size={14} />
                 </button>
 
@@ -244,7 +274,7 @@ export default function CartDrawer({ isOpen, onClose, cart, onUpdateQuantity, on
                   className="w-full py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm"
                 >
                   <MessageSquare size={14} />
-                  <span>Order via WhatsApp</span>
+                  <span>Order Directly via WhatsApp</span>
                 </button>
               </div>
 
