@@ -1,8 +1,10 @@
-import React, { useMemo, useState } from 'react';
-import { Leaf, SearchX } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ChevronDown, Leaf, SearchX } from 'lucide-react';
 import ProductCard from './ProductCard';
 import { navigate } from '../lib/router';
 import { startingPrice } from '../lib/pricing';
+
+const PAGE_SIZE = 12;
 
 function setParam(key, value) {
   const params = new URLSearchParams(window.location.search);
@@ -12,12 +14,16 @@ function setParam(key, value) {
   navigate(`/${qs ? `?${qs}` : ''}`, { replace: true, keepScroll: true });
 }
 
-export default function Catalog({ products, categories, search, settings, onAddToEnquiry }) {
+export default function Catalog({ products, categories, search, settings, onAddToCart }) {
   const params = new URLSearchParams(search);
   const category = params.get('c') || 'all';
   const query = (params.get('q') || '').toLowerCase();
   const [ecoOnly, setEcoOnly] = useState(false);
   const [sort, setSort] = useState('catalog');
+  const [limit, setLimit] = useState(PAGE_SIZE);
+
+  // start from the first page whenever the filters change
+  useEffect(() => setLimit(PAGE_SIZE), [category, query, ecoOnly, sort]);
 
   const counts = useMemo(() => {
     const map = {};
@@ -48,20 +54,20 @@ export default function Catalog({ products, categories, search, settings, onAddT
   return (
     <section id="catalog" className="mx-auto max-w-7xl scroll-mt-32 px-4 py-12 sm:px-6 md:py-16 lg:px-8">
       <div className="flex flex-col gap-1">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold-600">Product catalog</p>
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold-600">Shop the collection</p>
         <h2 className="text-2xl font-extrabold sm:text-3xl">
-          {query ? `Results for “${params.get('q')}”` : activeCategory ? activeCategory.name : 'All gift sets'}
+          {query ? `Results for “${params.get('q')}”` : activeCategory ? activeCategory.name : 'Every gift, ready for your logo'}
         </h2>
-        <p className="text-sm text-ink/60">Quality · Trust · Best price. Prices are per piece and drop as your quantity grows.</p>
+        <p className="text-sm text-ink/60">Prices shown are per piece. Order more and every piece costs less.</p>
       </div>
 
       <div className="no-scrollbar -mx-4 mt-6 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0">
         <button className={chip(category === 'all')} onClick={() => setParam('c', '')}>
-          All <span className="opacity-60">({products.length})</span>
+          All gifts
         </button>
         {categories.filter(c => counts[c.id]).map(c => (
           <button key={c.id} className={chip(category === c.id)} onClick={() => setParam('c', c.id)}>
-            {c.name} <span className="opacity-60">({counts[c.id]})</span>
+            {c.name}
           </button>
         ))}
       </div>
@@ -75,7 +81,6 @@ export default function Catalog({ products, categories, search, settings, onAddT
           >
             <Leaf size={14} /> Eco · Bamboo & cork
           </button>
-          <span className="text-xs text-ink/50">{visible.length} sets</span>
         </div>
         <label className="flex items-center gap-2 text-xs text-ink/60">
           Sort
@@ -91,17 +96,26 @@ export default function Catalog({ products, categories, search, settings, onAddT
         <div className="mt-8 flex flex-col items-center gap-3 rounded-2xl border border-dashed border-ink/20 py-16 text-center">
           <SearchX className="text-ink/30" size={32} />
           <p className="font-semibold">No gift sets match that</p>
-          <p className="max-w-sm text-sm text-ink/60">Try another word, or tell us what you need on WhatsApp. We can build a custom combo.</p>
+          <p className="max-w-sm text-sm text-ink/60">Try another word, or tell us what you need on WhatsApp and we'll put together a custom combo for you.</p>
           <button className="btn-dark mt-2" onClick={() => { setEcoOnly(false); navigate('/', { replace: true, keepScroll: true }); }}>
             Show all gift sets
           </button>
         </div>
       ) : (
-        <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
-          {visible.map(product => (
-            <ProductCard key={product.id} product={product} settings={settings} onAddToEnquiry={onAddToEnquiry} />
-          ))}
-        </div>
+        <>
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
+            {visible.slice(0, limit).map(product => (
+              <ProductCard key={product.id} product={product} settings={settings} onAddToCart={onAddToCart} />
+            ))}
+          </div>
+          {visible.length > limit && (
+            <div className="mt-8 flex justify-center">
+              <button className="btn-outline px-8" onClick={() => setLimit(l => l + PAGE_SIZE)}>
+                Show more gifts <ChevronDown size={16} />
+              </button>
+            </div>
+          )}
+        </>
       )}
     </section>
   );

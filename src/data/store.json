@@ -4,8 +4,13 @@
     "phone_display": "90877 78321",
     "email": "heecartorders@gmail.com",
     "address": "No 37, Ameen Zohra Complex, 3rd Floor, Pycrofts Road, Triplicane, Chennai - 600005",
-    "instagram": "",
-    "announcement": "Bulk orders accepted · Custom branding on every gift · GST & shipping extra"
+    "instagram": "heecart_com",
+    "announcement": "Custom branding on every gift · Bulk prices from 5 pieces · Pay easily by GPay / UPI",
+    "free_shipping_enabled": true,
+    "free_shipping_min": 5000,
+    "offer_ends_at": "",
+    "trust_orders": "60,000+",
+    "trust_since": "2018"
   },
   "categories": [
     {
@@ -75,7 +80,7 @@
         "Metal keychain",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A sleek black metal pen and a polished rectangular keychain, presented in a striking black-and-gold box. Small price, big first impression. The easiest way to welcome new hires, delegates and channel partners.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -116,7 +121,7 @@
         "Metal keychain",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "Classic black and chrome, made to be used every day. The pen and keychain sit in a fitted matte-black gift box, ready to carry your logo into every meeting your clients walk into.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -157,7 +162,7 @@
         "Metal keychain",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A refined metal pen with a matching curved-metal keychain in a premium black box. A graceful thank-you for clients, dealers and teams, priced to make bulk gifting easy.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -198,7 +203,7 @@
         "Metal keychain with your logo",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "Gold-flake detailing that catches the light every time it's picked up. Your company name is engraved on the pen and your logo on the keychain, so your brand stays in their hand and on their keys long after the event.",
       "tags": [],
       "badge": "",
       "featured": true,
@@ -239,7 +244,7 @@
         "Metal keychain with your logo",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "Warm rose-gold accents on a deep black pen, paired with a leatherette keychain carrying your logo. Elegant and understated. Ideal for Women's Day, client meets and premium event kits.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -280,7 +285,7 @@
         "Metal keychain with your logo",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "Write on paper, tap on screens. This black stylus pen works on phones and tablets and comes with a logo keychain in a gift box. A modern, practical gift for teams and clients who live on their devices.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -321,7 +326,7 @@
         "Pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A soft tan leatherette diary with a polished round magnetic clasp and a matching pen. It feels expensive in the hand and looks beautiful on any desk, so your brand gets seen every working day.",
       "tags": [],
       "badge": "",
       "featured": true,
@@ -362,7 +367,7 @@
         "Bamboo pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A natural bamboo-cover diary with a matching bamboo pen. Sustainable without compromising on style, and the right message for green initiatives, CSR events and eco-conscious clients.",
       "tags": [
         "eco"
       ],
@@ -405,7 +410,7 @@
         "Metal pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "An executive black diary with a silver round magnetic clip and a metal pen. Clean, professional and timeless: the kind of gift that stays on a director's desk all year.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -446,7 +451,7 @@
         "Pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "Rich caramel leatherette with a brushed-metal clasp and a colour-matched pen. Warm, premium and instantly impressive the moment the box opens.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -487,7 +492,7 @@
         "Cork pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A navy diary with a natural cork panel and a cork-trim pen. Eco-friendly, on-trend and a refreshing change from the usual leather diary.",
       "tags": [
         "eco"
       ],
@@ -530,7 +535,7 @@
         "Metal pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A soft-touch notebook with a magnetic snap closure and a slim metal pen. Light to carry, a pleasure to write in, and smart enough for any boardroom.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -571,7 +576,7 @@
         "Pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "Bold orange leatherette that stands out in every meeting, with a matching pen. For brands that want their gift noticed and remembered.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -612,7 +617,7 @@
         "Metal pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A classic black diary with a polished metal clip and a sleek pen. Professional, versatile and loved by every age group. A safe, stylish choice for big orders.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -653,7 +658,7 @@
         "Pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A textured grey diary with a round magnetic clasp and a black pen. Modern, minimal and quietly premium.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -694,7 +699,7 @@
         "Pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "Deep green leatherette with a pop of blue on the clasp, paired with a black pen. A distinctive colour combination that feels thoughtful and fresh.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -735,7 +740,7 @@
         "Gold metal pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A charcoal textured cover with gold-trimmed edges, a gold clip and a gold-accented pen. Luxury you can feel, made for leadership, VIP clients and award nights.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -776,7 +781,7 @@
         "Metal pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A round metal keychain with a big engraving face, plus a smooth-writing metal pen. Your logo looks bold on the disc. A smart, budget-friendly pick for large teams and events.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -818,7 +823,7 @@
         "Metal pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "Our most-loved set. A black diary with an engraved name plate, a steel bottle carrying the recipient's name, and a metal pen, each one personalised. It doesn't feel like a corporate gift. It feels like it was made just for them.",
       "tags": [],
       "badge": "Most loved",
       "featured": true,
@@ -860,7 +865,7 @@
         "Metal pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A black diary, an insulated steel bottle with a carry loop and a metal pen in a premium box. Built for people on the move: sales teams, field staff and frequent travellers.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -902,7 +907,7 @@
         "Metal pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A diary, a sports-cap steel bottle and a metal pen in a sleek black box. Everyday essentials, beautifully branded.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -944,7 +949,7 @@
         "Metal pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "An all-black diary, bottle and pen in a structured gift box. Minimal and premium, and a perfect default for employee kits.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -986,7 +991,7 @@
         "Metal pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A bold red diary and red steel bottle with a matching pen. Festive, energetic and unforgettable, and a hit for Diwali, New Year and celebrations.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -1028,7 +1033,7 @@
         "Bamboo pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A bamboo diary, bamboo-finish bottle and bamboo pen: a complete eco kit in warm natural wood. Sustainable gifting that still looks seriously premium.",
       "tags": [
         "eco"
       ],
@@ -1072,7 +1077,7 @@
         "Metal pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A diary with a dotted world-map cover, a black steel bottle and a metal pen. Made for global teams, travel brands and anyone with big ambitions.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -1114,7 +1119,7 @@
         "Metal pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A clean white diary, white steel bottle and silver pen. Bright and elegant, ideal for healthcare, wellness and modern brands.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -1156,7 +1161,7 @@
         "Pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A black diary with a cork panel, a bottle with a bamboo lid and a cork-trim pen. Eco-luxe styling for brands that want to stand apart.",
       "tags": [
         "eco"
       ],
@@ -1200,7 +1205,7 @@
         "Pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A vibrant orange diary with a metal clasp, plus a matching orange bottle and pen. Joyful, energetic and guaranteed to brighten every desk.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -1242,7 +1247,7 @@
         "Metal keychain",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A steel bottle, metal pen and metal keychain: three things people use every single day, all carrying your logo. Practical gifting that keeps your name in view.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -1284,7 +1289,7 @@
         "Metal keychain",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A slim steel bottle, metal pen and keychain in a black box. Compact, useful and great value for big teams.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -1326,7 +1331,7 @@
         "Metal keychain",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A diary, metal pen and bottle-opener keychain in a black presentation box. A complete desk-to-pocket kit.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -1368,7 +1373,7 @@
         "Metal keychain",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A black diary with a blue magnetic clasp, a metal pen and a leatherette keychain. Smart, colourful and very giftable.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -1410,7 +1415,7 @@
         "Metal keychain",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A premium diary with a metal clip, a pen and a metal keychain in a structured box. An executive feel at a sensible price.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -1452,7 +1457,7 @@
         "Metal keychain",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A black diary with a round metal clasp, a pen and a metal keychain. A refined trio for managers and clients.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -1494,7 +1499,7 @@
         "Metal keychain",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A full cork diary, bamboo pen and metal keychain. Earthy, eco-friendly and refreshingly different.",
       "tags": [
         "eco"
       ],
@@ -1538,7 +1543,7 @@
         "Metal keychain",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A crisp white diary, metal pen and metal bottle-opener keychain. Fresh, light and modern.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -1580,7 +1585,7 @@
         "Cork keychain",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A white-and-cork diary with a cork pen and cork keychain. A designer eco set that looks beautiful in photos.",
       "tags": [
         "eco"
       ],
@@ -1624,7 +1629,7 @@
         "Cork keychain",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A black-and-cork diary, pen and cork keychain. Bold contrast with a natural texture.",
       "tags": [
         "eco"
       ],
@@ -1668,7 +1673,7 @@
         "Metal keychain",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "Our premium diary trio: a plush leatherette diary with a metal clasp, a heavy metal pen and a gold-tone keychain. For the gifts that need to say 'you matter'.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -1711,7 +1716,7 @@
         "Steel bottle",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A diary, pen, keychain and steel bottle in one premium box. Everything a professional reaches for, all with your logo.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -1754,7 +1759,7 @@
         "Card holder",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A diary, pen, keychain and sleek card holder. Built for networking and for leaving a lasting impression.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -1797,7 +1802,7 @@
         "Steel bottle",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A diary, metal pen, branded pendrive and steel bottle. The tech-smart executive kit for conferences, training programmes and onboarding.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -1840,7 +1845,7 @@
         "Keychain",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A bamboo diary, bamboo card holder, bamboo pen and keychain. A fully sustainable set your clients will be proud to show off.",
       "tags": [
         "eco"
       ],
@@ -1885,7 +1890,7 @@
         "Keychain",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A bamboo diary, bamboo bottle, bamboo pen and keychain. Natural, elegant and kind to the planet.",
       "tags": [
         "eco"
       ],
@@ -1930,7 +1935,7 @@
         "Pen",
         "Premium gift box"
       ],
-      "description": "",
+      "description": "A black diary, metal card holder, keychain and pen. A classic four-piece executive set at a smart price.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -1973,7 +1978,7 @@
         "Metal pen",
         "Keychain"
       ],
-      "description": "",
+      "description": "A diary, steel bottle, travel tumbler, metal pen and keychain. A generous five-piece set that turns any desk into a premium workspace.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -2016,7 +2021,7 @@
         "Metal pen",
         "Keychain"
       ],
-      "description": "",
+      "description": "A diary, ceramic mug, steel bottle, pen and keychain. From morning coffee to evening meetings, your brand is part of their whole day.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -2059,7 +2064,7 @@
         "Premium metal pen",
         "Water bottle"
       ],
-      "description": "",
+      "description": "A premium notebook, card holder, keychain, metal pen and water bottle. The complete corporate essentials kit in a luxury presentation box.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -2102,7 +2107,7 @@
         "Metal pen",
         "Keychain"
       ],
-      "description": "",
+      "description": "A velvet-finish bottle, metal-clasp diary, card holder, pen and keychain. Soft-touch luxury that feels as good as it looks.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -2145,7 +2150,7 @@
         "Bamboo pen",
         "Bamboo keychain"
       ],
-      "description": "",
+      "description": "A glass bottle with a jute sleeve, bamboo diary, bamboo card holder, pen and keychain. Eco gifting at its most elegant.",
       "tags": [
         "eco"
       ],
@@ -2190,7 +2195,7 @@
         "Pen",
         "Keychain"
       ],
-      "description": "",
+      "description": "A laptop sleeve bag, travel tumbler, diary, pen and keychain. Everything your team needs for the office and the road, branded and ready to go.",
       "tags": [],
       "badge": "",
       "featured": true,
@@ -2234,7 +2239,7 @@
         "Metal pen",
         "Keychain"
       ],
-      "description": "",
+      "description": "A diary, ceramic mug, steel bottle, card holder, pen and keychain. A six-piece showstopper for leadership and key clients.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -2278,7 +2283,7 @@
         "Pen",
         "Keychain"
       ],
-      "description": "",
+      "description": "A cork-accent laptop bag with a diary, bottle, card holder, pen and keychain. Stylish, sustainable and seriously useful.",
       "tags": [
         "eco"
       ],
@@ -2324,7 +2329,7 @@
         "Pen",
         "Keychain"
       ],
-      "description": "",
+      "description": "A tan leatherette laptop bag, diary, bottle, card holder, pen and keychain. Boardroom-ready luxury for your most important people.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -2369,7 +2374,7 @@
         "Pen",
         "Keychain"
       ],
-      "description": "",
+      "description": "A laptop bag, diary, steel bottle, tumbler, card holder, pen and keychain. Our most complete executive kit, and every piece can carry a name or logo.",
       "tags": [],
       "badge": "",
       "featured": true,
@@ -2406,7 +2411,7 @@
         }
       ],
       "includes": [],
-      "description": "A 7-piece bamboo and jute set with a canvas laptop bag. Message us on WhatsApp for the full list of items.",
+      "description": "A seven-piece set built around a canvas laptop bag, with bamboo and jute accessories. Natural textures and a premium finish that make it clear your brand cares.",
       "tags": [
         "eco"
       ],
@@ -2451,7 +2456,7 @@
         "Pen",
         "Keychain"
       ],
-      "description": "",
+      "description": "A black-and-cork laptop bag, cork diary, steel bottle, pen and keychain. Bold, eco-chic and impossible to ignore.",
       "tags": [
         "eco"
       ],
@@ -2496,7 +2501,7 @@
         "Bamboo pen",
         "Bamboo keychain"
       ],
-      "description": "",
+      "description": "A canvas laptop bag, glass bottle with a jute sleeve, bamboo notebook, bamboo pen and bamboo keychain. Our signature eco kit.",
       "tags": [
         "eco"
       ],
@@ -2540,7 +2545,7 @@
         "Blue pen",
         "Keychain"
       ],
-      "description": "",
+      "description": "A blue laptop sleeve with a matching diary, pen and keychain. A coordinated, colourful kit for large teams on a budget.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -2581,7 +2586,7 @@
         "Pen",
         "Canvas tote bag"
       ],
-      "description": "",
+      "description": "A diary, pen and canvas tote bag. Simple, useful and great value for events, seminars and large teams.",
       "tags": [],
       "badge": "",
       "featured": false,
@@ -2613,7 +2618,7 @@
         }
       ],
       "includes": [],
-      "description": "Employee onboarding kit, available for orders of 5 pieces and above. The photo shows the full work bundle; message us on WhatsApp to fix the exact items for your team.",
+      "description": "Make day one unforgettable. A complete onboarding bundle built around a laptop backpack. Tell us your team size and we'll tailor the items to your budget. Available from 5 pieces.",
       "tags": [],
       "badge": "Bulk only",
       "featured": true,
@@ -2645,7 +2650,7 @@
         }
       ],
       "includes": [],
-      "description": "Backpack-based onboarding kit, available for orders of 5 pieces and above. Message us on WhatsApp to fix the exact items for your team.",
+      "description": "A backpack joining kit with a diary, mug, bottle and accessories, so new hires feel at home from the first hour. Available from 5 pieces.",
       "tags": [],
       "badge": "Bulk only",
       "featured": false,
@@ -2687,7 +2692,7 @@
         "Pen",
         "Premium gift box"
       ],
-      "description": "Available in black, blue and red. Tell us your colour on WhatsApp.",
+      "description": "A diary, steel bottle and pen in coordinated colours: black, blue or red. Pick the colour that matches your brand and tell us on WhatsApp.",
       "tags": [],
       "badge": "",
       "featured": false,

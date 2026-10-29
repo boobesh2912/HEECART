@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Phone, Search, ShoppingBag, X } from 'lucide-react';
+import { Phone, Search, ShoppingCart, X } from 'lucide-react';
 import { linkHandler, navigate } from '../lib/router';
+import { freeShippingOffer } from '../lib/offer';
+import { formatINR } from '../lib/pricing';
 
 function SearchBox({ search, className = '' }) {
   const initial = new URLSearchParams(search).get('q') || '';
@@ -18,16 +20,12 @@ function SearchBox({ search, className = '' }) {
   };
 
   return (
-    <form
-      className={`relative ${className}`}
-      onSubmit={e => { e.preventDefault(); submit(value); }}
-      role="search"
-    >
+    <form className={`relative ${className}`} onSubmit={e => { e.preventDefault(); submit(value); }} role="search">
       <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink/40" />
       <input
         value={value}
         onChange={e => setValue(e.target.value)}
-        placeholder="Search diary, bottle, pen, bamboo…"
+        placeholder="Search diaries, bottles, pens, eco kits…"
         className="input rounded-full bg-cream/60 py-2.5 pl-10 pr-9"
         aria-label="Search products"
       />
@@ -40,32 +38,74 @@ function SearchBox({ search, className = '' }) {
   );
 }
 
-export default function Header({ settings, search, enquiryCount, onOpenEnquiry }) {
+// Rotating messages in the top bar.
+function Announcements({ settings }) {
+  const offer = freeShippingOffer(settings);
+  const messages = [
+    offer && `FREE shipping on orders above ${formatINR(offer.min)}${offer.daily ? ' · Today only' : ''}`,
+    settings.trust_orders && `${settings.trust_orders} orders delivered${settings.trust_since ? ` since ${settings.trust_since}` : ''}`,
+    ...String(settings.announcement || '').split('·').map(s => s.trim()),
+  ].filter(Boolean);
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (messages.length < 2) return;
+    const timer = setInterval(() => setIndex(i => (i + 1) % messages.length), 3500);
+    return () => clearInterval(timer);
+  }, [messages.length]);
+
+  if (!messages.length) return null;
+  return (
+    <div className="bg-ink px-4 py-2 text-center text-[11px] font-semibold tracking-wide text-gold-400 sm:text-xs" aria-live="polite">
+      <span key={index} className="animate-fade-in inline-block">{messages[index % messages.length]}</span>
+    </div>
+  );
+}
+
+const NAV = [
+  { label: 'Shop all', href: '/#catalog' },
+  { label: 'Bestsellers', href: '/#bestsellers' },
+  { label: 'Bulk savings', href: '/#bulk-savings' },
+  { label: 'How it works', href: '/#how-to-order' },
+];
+
+function goToSection(e, href) {
+  e.preventDefault();
+  const id = href.split('#')[1];
+  if (window.location.pathname !== '/') navigate('/');
+  requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }));
+}
+
+export default function Header({ settings, search, cartCount, onOpenCart }) {
   return (
     <header className="sticky top-0 z-40">
-      {settings.announcement && (
-        <div className="bg-ink px-4 py-2 text-center text-[11px] font-medium tracking-wide text-gold-400 sm:text-xs">
-          {settings.announcement}
-        </div>
-      )}
+      <Announcements settings={settings} />
       <div className="border-b border-ink/10 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 sm:px-6 lg:px-8">
           <a href="/" onClick={linkHandler('/')} className="shrink-0" aria-label="Heecart home">
             <img src="/logo.png" alt="Heecart Gifts and More" className="h-10 w-auto sm:h-12" />
           </a>
 
-          <SearchBox search={search} className="mx-auto hidden max-w-md flex-1 md:block" />
+          <nav className="hidden items-center gap-1 xl:flex">
+            {NAV.map(item => (
+              <a key={item.label} href={item.href} onClick={e => goToSection(e, item.href)} className="rounded-full px-3 py-2 text-sm font-semibold text-ink/70 hover:bg-cream hover:text-ink">
+                {item.label}
+              </a>
+            ))}
+          </nav>
+
+          <SearchBox search={search} className="mx-auto hidden max-w-sm flex-1 md:block" />
 
           <div className="ml-auto flex items-center gap-2 md:ml-0">
             <a href={`tel:+${settings.whatsapp}`} className="hidden items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold text-ink hover:bg-cream lg:flex">
               <Phone size={16} className="text-gold-600" />
               {settings.phone_display}
             </a>
-            <button onClick={onOpenEnquiry} className="relative flex items-center gap-2 rounded-full bg-ink px-4 py-2.5 text-sm font-semibold text-white hover:bg-ink-700" aria-label={`Enquiry list, ${enquiryCount} items`}>
-              <ShoppingBag size={17} className="text-gold-400" />
-              <span className="hidden sm:inline">Enquiry list</span>
-              {enquiryCount > 0 && (
-                <span className="grid h-5 min-w-5 place-items-center rounded-full bg-gold-500 px-1 text-[11px] font-bold text-ink">{enquiryCount}</span>
+            <button onClick={onOpenCart} className="relative flex items-center gap-2 rounded-full bg-ink px-4 py-2.5 text-sm font-semibold text-white hover:bg-ink-700" aria-label={`Cart, ${cartCount} items`}>
+              <ShoppingCart size={17} className="text-gold-400" />
+              <span className="hidden sm:inline">Cart</span>
+              {cartCount > 0 && (
+                <span className="grid h-5 min-w-5 place-items-center rounded-full bg-gold-500 px-1 text-[11px] font-bold text-ink">{cartCount}</span>
               )}
             </button>
           </div>

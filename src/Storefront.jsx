@@ -3,34 +3,32 @@ import { Check } from 'lucide-react';
 import { store } from './lib/store';
 import { minOrderQty } from './lib/pricing';
 import Header from './components/Header';
-import Hero from './components/Hero';
-import Features from './components/Features';
-import Catalog from './components/Catalog';
+import HomePage from './components/HomePage';
 import ProductPage from './components/ProductPage';
-import EnquiryDrawer from './components/EnquiryDrawer';
-import { HowToOrder, PricingGuide, FAQ } from './components/InfoSections';
+import CartDrawer from './components/CartDrawer';
+import PolicyPage, { POLICIES } from './components/PolicyPage';
 import Footer from './components/Footer';
 import MobileNav from './components/MobileNav';
 import NotFound from './components/NotFound';
 
-const ENQUIRY_KEY = 'heecart_enquiry';
+const CART_KEY = 'heecart_cart';
 
-function readEnquiry() {
+function readCart() {
   try {
-    return JSON.parse(localStorage.getItem(ENQUIRY_KEY)) || [];
+    return JSON.parse(localStorage.getItem(CART_KEY)) || [];
   } catch (e) {
     return [];
   }
 }
 
 export default function Storefront({ route }) {
-  const [enquiry, setEnquiry] = useState(readEnquiry);
-  const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
+  const [cart, setCart] = useState(readCart);
+  const [cartView, setCartView] = useState(null); // null (closed) | 'cart' | 'checkout'
   const [toast, setToast] = useState('');
 
   useEffect(() => {
-    try { localStorage.setItem(ENQUIRY_KEY, JSON.stringify(enquiry)); } catch (e) {}
-  }, [enquiry]);
+    try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {}
+  }, [cart]);
 
   useEffect(() => {
     if (!toast) return;
@@ -38,82 +36,76 @@ export default function Storefront({ route }) {
     return () => clearTimeout(timer);
   }, [toast]);
 
-  // Saved enquiry items keep only the product id; use the current product data (prices may have changed)
+  // The saved cart keeps only product ids; use the current product data (prices may have changed)
   // and drop products that were removed or hidden since.
-  const enquiryItems = useMemo(() => {
+  const cartItems = useMemo(() => {
     const byId = Object.fromEntries(store.products.map(p => [p.id, p]));
-    return enquiry.filter(item => byId[item.id]).map(item => ({ ...item, product: byId[item.id] }));
-  }, [enquiry]);
+    return cart.filter(item => byId[item.id]).map(item => ({ ...item, product: byId[item.id] }));
+  }, [cart]);
 
-  const addToEnquiry = (product, qty = minOrderQty(product), printText = '') => {
-    setEnquiry(prev => {
+  const addToCart = (product, qty = minOrderQty(product), printText = '', { checkout = false } = {}) => {
+    setCart(prev => {
       const existing = prev.findIndex(i => i.id === product.id && i.printText === printText);
       if (existing >= 0) {
-        return prev.map((item, i) => (i === existing ? { ...item, qty: item.qty + qty } : item));
+        return prev.map((item, i) => (i === existing ? { ...item, qty: checkout ? qty : item.qty + qty } : item));
       }
       return [...prev, { id: product.id, qty, printText }];
     });
-    setToast(`Added "${product.name}" to your enquiry list`);
+    if (checkout) setCartView('checkout');
+    else setToast(`Added "${product.name}" to your cart`);
   };
 
-  // The drawer works with enquiryItems, so match items by id + print text rather than by index.
+  // The drawer works with cartItems, so match items by id + print text rather than by index.
   const sameItem = target => item => item.id === target.product.id && item.printText === target.printText;
-  const updateEnquiry = (target, patch) => setEnquiry(prev => prev.map(item => (sameItem(target)(item) ? { ...item, ...patch } : item)));
-  const removeFromEnquiry = target => setEnquiry(prev => prev.filter(item => !sameItem(target)(item)));
+  const updateCart = (target, patch) => setCart(prev => prev.map(item => (sameItem(target)(item) ? { ...item, ...patch } : item)));
+  const removeFromCart = target => setCart(prev => prev.filter(item => !sameItem(target)(item)));
 
   const { path, search } = route;
   const productId = path.startsWith('/p/') ? decodeURIComponent(path.slice(3)) : null;
   const product = productId && store.products.find(p => p.id === productId);
+  const policy = POLICIES.find(p => `/${p.slug}` === path);
 
   useEffect(() => {
     document.title = product
       ? `${product.name} | Heecart Gifts and More`
-      : 'Heecart Gifts and More | Corporate Combo Gifts, Chennai';
-  }, [product]);
+      : policy
+        ? `${policy.title} | Heecart Gifts and More`
+        : 'Heecart Gifts and More | Premium Corporate Gifts, Chennai';
+  }, [product, policy]);
 
-  const shared = { settings: store.settings, onAddToEnquiry: addToEnquiry };
-  const enquiryCount = enquiryItems.length;
+  const shared = { settings: store.settings, onAddToCart: addToCart };
 
   let page;
-  if (path === '/') {
-    page = (
-      <>
-        <Hero products={store.products} settings={store.settings} />
-        <Features />
-        <Catalog products={store.products} categories={store.categories} search={search} {...shared} />
-        <PricingGuide />
-        <HowToOrder settings={store.settings} />
-        <FAQ settings={store.settings} />
-      </>
-    );
-  } else if (product) {
-    page = <ProductPage key={product.id} product={product} products={store.products} categories={store.categories} {...shared} />;
-  } else {
-    page = <NotFound />;
-  }
+  if (path === '/') page = <HomePage store={store} search={search} {...shared} />;
+  else if (product) page = <ProductPage key={product.id} product={product} products={store.products} categories={store.categories} {...shared} />;
+  else if (policy) page = <PolicyPage policy={policy} settings={store.settings} />;
+  else page = <NotFound />;
+
+  const cartCount = cartItems.length;
+  const openCart = () => setCartView('cart');
 
   return (
     <div className="flex min-h-screen flex-col pb-16 md:pb-0">
-      <Header settings={store.settings} search={search} enquiryCount={enquiryCount} onOpenEnquiry={() => setIsEnquiryOpen(true)} />
+      <Header settings={store.settings} search={search} cartCount={cartCount} onOpenCart={openCart} />
       <main className="flex-1">{page}</main>
       <Footer settings={store.settings} categories={store.categories} />
-      <MobileNav settings={store.settings} enquiryCount={enquiryCount} onOpenEnquiry={() => setIsEnquiryOpen(true)} />
+      <MobileNav settings={store.settings} cartCount={cartCount} onOpenCart={openCart} />
 
-      <EnquiryDrawer
-        isOpen={isEnquiryOpen}
-        onClose={() => setIsEnquiryOpen(false)}
-        items={enquiryItems}
+      <CartDrawer
+        view={cartView}
+        onViewChange={setCartView}
+        items={cartItems}
         settings={store.settings}
-        onUpdate={updateEnquiry}
-        onRemove={removeFromEnquiry}
-        onClear={() => setEnquiry([])}
+        onUpdate={updateCart}
+        onRemove={removeFromCart}
+        onClear={() => setCart([])}
       />
 
       {toast && (
-        <div className="animate-fade-in fixed bottom-20 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-xl bg-ink px-4 py-3 text-xs font-semibold text-white shadow-xl md:bottom-6">
-          <Check size={15} className="text-gold-400" />
-          <span>{toast}</span>
-          <button onClick={() => { setToast(''); setIsEnquiryOpen(true); }} className="ml-2 text-gold-400 underline">View</button>
+        <div className="animate-fade-in fixed bottom-20 left-1/2 z-50 flex w-max max-w-[calc(100%-2rem)] -translate-x-1/2 items-center gap-2 rounded-xl bg-ink px-4 py-3 text-xs font-semibold text-white shadow-xl md:bottom-6">
+          <Check size={15} className="shrink-0 text-gold-400" />
+          <span className="truncate">{toast}</span>
+          <button onClick={() => { setToast(''); openCart(); }} className="ml-2 shrink-0 text-gold-400 underline">View cart</button>
         </div>
       )}
     </div>

@@ -1,7 +1,7 @@
 export const formatINR = amount =>
   `₹${Number(amount || 0).toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
 
-const sortedTiers = product => [...(product.tiers || [])].filter(t => t.price != null).sort((a, b) => a.min - b.min);
+export const sortedTiers = product => [...(product.tiers || [])].filter(t => t.price != null).sort((a, b) => a.min - b.min);
 
 export const minOrderQty = product => sortedTiers(product)[0]?.min ?? 1;
 
@@ -19,6 +19,7 @@ export function activeTierIndex(product, qty) {
   return index;
 }
 
+// The first slab's price is the "regular" price that bulk savings are measured against.
 export const startingPrice = product => sortedTiers(product)[0]?.price ?? null;
 
 export const lowestPrice = product => {
@@ -26,8 +27,22 @@ export const lowestPrice = product => {
   return prices.length ? Math.min(...prices) : null;
 };
 
+export const savingsPercent = (product, price) => {
+  const base = startingPrice(product);
+  return base && price < base ? Math.round(((base - price) / base) * 100) : 0;
+};
+
+export const maxSavingsPercent = product => savingsPercent(product, lowestPrice(product));
+
 export function couponDiscount(coupon, subtotal) {
   if (!coupon || subtotal < (coupon.min_amount || 0)) return 0;
   const raw = coupon.type === 'percent' ? (subtotal * coupon.value) / 100 : coupon.value;
   return Math.min(Math.round(raw), subtotal);
+}
+
+export function cartTotals(items, coupon) {
+  const subtotal = items.reduce((sum, i) => sum + (unitPrice(i.product, i.qty) || 0) * i.qty, 0);
+  const regular = items.reduce((sum, i) => sum + (startingPrice(i.product) || 0) * i.qty, 0);
+  const discount = couponDiscount(coupon, subtotal);
+  return { subtotal, bulkSavings: Math.max(0, regular - subtotal), discount, total: subtotal - discount };
 }

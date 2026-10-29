@@ -28,7 +28,7 @@ export default function CouponsTab({ data, run, busy }) {
     <div className="max-w-3xl">
       <h1 className="text-xl font-extrabold">Coupons & festival offers</h1>
       <p className="mt-1 text-sm text-ink/60">
-        Customers type the code in their enquiry list. The discount appears in the WhatsApp message they send you.
+        Customers type the code in their cart. The discount appears in the WhatsApp order they send you.
         Turn a coupon off when the offer ends.
       </p>
 
