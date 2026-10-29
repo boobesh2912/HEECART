@@ -2,27 +2,18 @@ import { STORE_PATH } from './store';
 
 // The CRM saves by committing straight to the GitHub repo through the GitHub REST API.
 // Each save is one commit holding the updated store.json plus any newly uploaded photos.
-// The token is typed in on the CRM login screen and kept only in that browser.
+// Requests go through the Cloudflare worker (worker/index.js), which checks the login
+// session and adds the GitHub token on the server, so the browser never sees it.
 
-export const REPO = import.meta.env.VITE_GITHUB_REPO || 'boobesh2912/HEECART';
 export const BRANCH = import.meta.env.VITE_GITHUB_BRANCH || 'main';
 
-const TOKEN_KEY = 'heecart_crm_github_token';
-
-export const getToken = () => {
-  try { return localStorage.getItem(TOKEN_KEY) || ''; } catch (e) { return ''; }
-};
-export const setToken = token => localStorage.setItem(TOKEN_KEY, token);
-export const clearToken = () => localStorage.removeItem(TOKEN_KEY);
-
-async function api(path, { method = 'GET', body, token = getToken() } = {}) {
-  const res = await fetch(`https://api.github.com/repos/${REPO}${path}`, {
+async function request(path, { method = 'GET', body } = {}) {
+  const res = await fetch(`/api/${path}`, {
     method,
     cache: 'no-store',
+    credentials: 'same-origin',
     headers: {
-      Accept: 'application/vnd.github+json',
-      Authorization: `Bearer ${token}`,
-      'X-GitHub-Api-Version': '2022-11-28',
+      'X-Requested-With': 'heecart-crm',
       ...(body ? { 'Content-Type': 'application/json' } : {}),
     },
     body: body ? JSON.stringify(body) : undefined,
@@ -30,15 +21,22 @@ async function api(path, { method = 'GET', body, token = getToken() } = {}) {
   if (!res.ok) {
     const detail = await res.json().catch(() => ({}));
     const message =
-      res.status === 401 ? 'The GitHub token is wrong or has expired.' :
-      res.status === 403 || res.status === 404 ? `This token can't access ${REPO}. Give it "Contents: Read and write" on that repo.` :
-      detail.message || `GitHub error ${res.status}`;
+      detail.error ||
+      (res.status === 401 ? 'Please log in again.' :
+       res.status === 403 || res.status === 404 ? 'The store could not reach GitHub. Check GITHUB_TOKEN in Cloudflare.' :
+       detail.message || `Server error ${res.status}`);
     const error = new Error(message);
     error.status = res.status;
     throw error;
   }
   return res.status === 204 ? null : res.json();
 }
+
+const api = (path, options) => request(`github${path}`, options);
+
+export const login = password => request('login', { method: 'POST', body: { password } });
+export const logout = () => request('logout', { method: 'POST' }).catch(() => {});
+export const checkSession = () => request('session').then(() => true, () => false);
 
 const bytesToBase64 = bytes => {
   let binary = '';
@@ -47,12 +45,6 @@ const bytesToBase64 = bytes => {
 };
 const textToBase64 = text => bytesToBase64(new TextEncoder().encode(text));
 const base64ToText = b64 => new TextDecoder().decode(Uint8Array.from(atob(b64.replace(/\n/g, '')), c => c.charCodeAt(0)));
-
-// Checks the token can write to the repo; used by the login screen.
-export async function verifyToken(token) {
-  const repo = await api('', { token });
-  if (!repo.permissions?.push) throw new Error(`This token can read ${REPO} but not save to it. Give it "Contents: Read and write".`);
-}
 
 async function headCommit() {
   const ref = await api(`/git/ref/heads/${BRANCH}`);

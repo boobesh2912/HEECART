@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Phone, Search, ShoppingCart, X } from 'lucide-react';
 import { linkHandler, navigate } from '../lib/router';
-import { freeShippingOffer } from '../lib/offer';
+import { freeShippingOffer, offerScope } from '../lib/offer';
 import { formatINR } from '../lib/pricing';
 
 function SearchBox({ search, className = '' }) {
@@ -42,7 +42,7 @@ function SearchBox({ search, className = '' }) {
 function Announcements({ settings }) {
   const offer = freeShippingOffer(settings);
   const messages = [
-    offer && `FREE shipping on orders above ${formatINR(offer.min)}${offer.daily ? ' · Today only' : ''}`,
+    offer && `FREE shipping ${offerScope(offer, formatINR)}${offer.daily ? ' · Order today' : ''}`,
     settings.trust_orders && `${settings.trust_orders} orders delivered${settings.trust_since ? ` since ${settings.trust_since}` : ''}`,
     ...String(settings.announcement || '').split('·').map(s => s.trim()),
   ].filter(Boolean);

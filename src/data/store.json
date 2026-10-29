@@ -7,7 +7,7 @@
     "instagram": "heecart_com",
     "announcement": "Custom branding on every gift · Bulk prices from 5 pieces · Pay easily by GPay / UPI",
     "free_shipping_enabled": true,
-    "free_shipping_min": 5000,
+    "free_shipping_min": 0,
     "offer_ends_at": "",
     "trust_orders": "60,000+",
     "trust_since": "2018"

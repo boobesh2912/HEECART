@@ -28,5 +28,9 @@ dist-ssr
 .env.*
 !.env.example
 
+# Cloudflare worker local secrets and cache
+.dev.vars*
+.wrangler/
+
 # Claude Code local config
 .claude/

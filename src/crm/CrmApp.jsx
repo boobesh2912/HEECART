@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ExternalLink, LogOut, Package, RefreshCw, Settings, Tag, Tags } from 'lucide-react';
-import { clearToken, commitStore, fetchStore, getToken } from '../lib/github';
+import { checkSession, commitStore, fetchStore, logout as endSession } from '../lib/github';
 import { prepareStore } from '../lib/store';
 import Login from './Login';
 import ProductsTab from './ProductsTab';
@@ -16,7 +16,7 @@ const TABS = [
 ];
 
 export default function CrmApp() {
-  const [authed, setAuthed] = useState(() => Boolean(getToken()));
+  const [authed, setAuthed] = useState(null); // null while checking the session
   const [tab, setTab] = useState('products');
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
@@ -32,6 +32,10 @@ export default function CrmApp() {
     return () => robots.remove();
   }, []);
 
+  useEffect(() => {
+    checkSession().then(setAuthed);
+  }, []);
+
   const show = raw => setData(prepareStore(raw, { includeHidden: true }));
 
   const reload = useCallback(async () => {
@@ -39,10 +43,7 @@ export default function CrmApp() {
       show(await fetchStore());
       setError('');
     } catch (err) {
-      if (err.status === 401) {
-        clearToken();
-        setAuthed(false);
-      }
+      if (err.status === 401) setAuthed(false);
       setError(err.message);
     }
   }, []);
@@ -66,6 +67,7 @@ export default function CrmApp() {
       setNotice(`${message}. Live on the website in about 1–2 minutes.`);
       return true;
     } catch (err) {
+      if (err.status === 401) setAuthed(false);
       alert(`Could not save: ${err.message}`);
       return false;
     } finally {
@@ -73,10 +75,11 @@ export default function CrmApp() {
     }
   }, []);
 
+  if (authed === null) return <div className="min-h-screen bg-ink" />;
   if (!authed) return <Login onSuccess={() => setAuthed(true)} />;
 
   const logout = () => {
-    clearToken();
+    endSession();
     setData(null);
     setAuthed(false);
   };

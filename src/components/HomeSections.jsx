@@ -7,7 +7,7 @@ import ProductCard from './ProductCard';
 import WhatsAppIcon from './WhatsAppIcon';
 import Instagram from './InstagramIcon';
 import { navigate } from '../lib/router';
-import { freeShippingOffer, pad, useCountdown } from '../lib/offer';
+import { freeShippingOffer, offerScope, pad, useCountdown } from '../lib/offer';
 import { formatINR, savingsPercent, sortedTiers } from '../lib/pricing';
 import { whatsappLink } from '../lib/whatsapp';
 
@@ -36,7 +36,7 @@ export function OfferStrip({ settings }) {
       <div className="mx-auto flex max-w-7xl flex-col items-center gap-3 px-4 py-4 sm:px-6 md:flex-row md:justify-between lg:px-8">
         <p className="flex items-center gap-2 text-center text-sm font-bold sm:text-base">
           <Truck size={20} className="shrink-0" />
-          FREE shipping on orders above {formatINR(offer.min)}. {offer.daily ? "Today's offer ends in" : 'Offer ends in'}
+          FREE shipping {offerScope(offer, formatINR)}. {offer.daily ? "Today's offer ends in" : 'Offer ends in'}
         </p>
         <div className="flex items-center gap-3">
           <div className="flex gap-1.5 font-mono" role="timer" aria-label="Time left in the offer">

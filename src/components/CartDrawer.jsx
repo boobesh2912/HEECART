@@ -3,7 +3,7 @@ import { ArrowLeft, CheckCircle2, Lock, Minus, Plus, ShoppingCart, Tag, Trash2, 
 import WhatsAppIcon from './WhatsAppIcon';
 import { linkHandler } from '../lib/router';
 import { findCoupon } from '../lib/store';
-import { freeShippingOffer } from '../lib/offer';
+import { freeShippingOffer, pad, useCountdown } from '../lib/offer';
 import { cartTotals, formatINR, minOrderQty, unitPrice } from '../lib/pricing';
 import { buildOrderMessage, newOrderId, openWhatsApp } from '../lib/whatsapp';
 
@@ -161,7 +161,7 @@ export default function CartDrawer({ view, onViewChange, items, settings, onUpda
         ) : (
           <>
             <div className="flex-1 space-y-4 overflow-y-auto p-5">
-              {offer && (
+              {offer && offer.min > 0 && (
                 <div className="rounded-2xl bg-cream p-3">
                   <p className="flex items-center gap-2 text-xs font-semibold">
                     <Truck size={15} className="text-gold-700" />
@@ -172,6 +172,7 @@ export default function CartDrawer({ view, onViewChange, items, settings, onUpda
                   </div>
                 </div>
               )}
+              {offer && offer.min === 0 && <FreeShippingTimer end={offer.end} />}
 
               {items.map(item => {
                 const price = unitPrice(item.product, item.qty);
@@ -255,6 +256,18 @@ function Field({ label, className = '', children }) {
       <span className="label">{label}</span>
       {children}
     </label>
+  );
+}
+
+function FreeShippingTimer({ end }) {
+  const left = useCountdown(end);
+  if (!left) return null;
+  const time = `${left.days ? `${left.days}d ` : ''}${pad(left.hours)}:${pad(left.minutes)}:${pad(left.seconds)}`;
+  return (
+    <p className="flex items-center gap-2 rounded-2xl bg-green-50 p-3 text-xs font-semibold text-green-800">
+      <Truck size={15} className="shrink-0" />
+      <span>Your order ships FREE if you place it in the next <strong className="font-mono">{time}</strong></span>
+    </p>
   );
 }
 

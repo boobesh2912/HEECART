@@ -37,7 +37,7 @@ export default function SettingsTab({ data, run, busy }) {
         </label>
         <div className="grid gap-3 sm:grid-cols-2">
           <div>
-            <label className="label" htmlFor="fs-min">Free shipping on orders above ₹</label>
+            <label className="label" htmlFor="fs-min">Free shipping on orders above ₹ (0 = every order)</label>
             <input id="fs-min" type="number" min="0" className="input" value={form.free_shipping_min ?? ''} onChange={e => set('free_shipping_min', e.target.value)} />
           </div>
           <div>

@@ -15,6 +15,10 @@ export function freeShippingOffer(settings, now = new Date()) {
   return { min: Number(settings.free_shipping_min) || 0, end, daily: !settings.offer_ends_at };
 }
 
+// "on every order" or "on orders above ₹X", for the offer messages.
+export const offerScope = (offer, formatINR) =>
+  offer.min > 0 ? `on orders above ${formatINR(offer.min)}` : 'on every order';
+
 export function useCountdown(end) {
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {

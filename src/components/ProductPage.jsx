@@ -26,7 +26,7 @@ function ShippingNote({ settings, total }) {
   const time = `${left.days ? `${left.days}d ` : ''}${pad(left.hours)}:${pad(left.minutes)}:${pad(left.seconds)}`;
   return total >= offer.min ? (
     <p className="flex items-center gap-1.5 text-xs font-semibold text-green-700">
-      <Truck size={14} /> You get FREE shipping. Offer ends in {time}
+      <Truck size={14} /> FREE shipping if you order in the next {time}
     </p>
   ) : (
     <p className="flex items-center gap-1.5 text-xs font-semibold text-gold-800">
