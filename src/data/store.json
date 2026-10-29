@@ -55,24 +55,29 @@
       "gallery": [],
       "tiers": [
         {
-          "min": 1,
           "label": "1 Pc",
+          "min": 1,
           "price": 199
         },
         {
-          "min": 5,
           "label": "5 – 10 Pcs",
+          "min": 5,
           "price": 150
         },
         {
-          "min": 30,
           "label": "30 – 50 Pcs",
+          "min": 30,
           "price": 120
         },
         {
-          "min": 100,
           "label": "100 Pcs +",
+          "min": 100,
           "price": 100
+        },
+        {
+          "label": "500+ Pcs",
+          "min": 500,
+          "price": 70
         }
       ],
       "includes": [
@@ -82,7 +87,7 @@
       ],
       "description": "A sleek black metal pen and a polished rectangular keychain, presented in a striking black-and-gold box. Small price, big first impression. The easiest way to welcome new hires, delegates and channel partners.",
       "tags": [],
-      "badge": "",
+      "badge": "New",
       "featured": false,
       "active": true,
       "sort_order": 1
