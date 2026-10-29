@@ -77,7 +77,7 @@ export default function ProductPage({ product, products, categories, settings, o
         {category && (
           <>
             <span>/</span>
-            <a href={`/?c=${category.id}`} onClick={linkHandler(`/?c=${category.id}`)} className="hover:text-ink">{category.name}</a>
+            <a href={`/shop?c=${category.id}`} onClick={linkHandler(`/shop?c=${category.id}`)} className="hover:text-ink">{category.name}</a>
           </>
         )}
       </nav>

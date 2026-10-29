@@ -33,7 +33,7 @@ export default function Footer({ settings, categories }) {
           <ul className="mt-4 space-y-2 text-sm">
             {categories.map(c => (
               <li key={c.id}>
-                <a href={`/?c=${c.id}`} onClick={linkHandler(`/?c=${c.id}`)} className="hover:text-gold-400">{c.name}</a>
+                <a href={`/shop?c=${c.id}`} onClick={linkHandler(`/shop?c=${c.id}`)} className="hover:text-gold-400">{c.name}</a>
               </li>
             ))}
           </ul>

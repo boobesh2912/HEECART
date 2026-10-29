@@ -4,6 +4,7 @@ import { store } from './lib/store';
 import { minOrderQty } from './lib/pricing';
 import Header from './components/Header';
 import HomePage from './components/HomePage';
+import ShopPage from './components/ShopPage';
 import ProductPage from './components/ProductPage';
 import CartDrawer from './components/CartDrawer';
 import PolicyPage, { POLICIES } from './components/PolicyPage';
@@ -70,13 +71,16 @@ export default function Storefront({ route }) {
       ? `${product.name} | Heecart Gifts and More`
       : policy
         ? `${policy.title} | Heecart Gifts and More`
+        : path === '/shop'
+          ? 'Shop corporate gifts | Heecart Gifts and More'
         : 'Heecart Gifts and More | Premium Corporate Gifts, Chennai';
-  }, [product, policy]);
+  }, [product, policy, path]);
 
   const shared = { settings: store.settings, onAddToCart: addToCart };
 
   let page;
-  if (path === '/') page = <HomePage store={store} search={search} {...shared} />;
+  if (path === '/') page = <HomePage store={store} {...shared} />;
+  else if (path === '/shop') page = <ShopPage products={store.products} categories={store.categories} search={search} {...shared} />;
   else if (product) page = <ProductPage key={product.id} product={product} products={store.products} categories={store.categories} {...shared} />;
   else if (policy) page = <PolicyPage policy={policy} settings={store.settings} />;
   else page = <NotFound />;

@@ -3,7 +3,8 @@ import { Leaf, ShoppingCart } from 'lucide-react';
 import { linkHandler } from '../lib/router';
 import { formatINR, lowestPrice, maxSavingsPercent, minOrderQty, startingPrice } from '../lib/pricing';
 
-export default function ProductCard({ product, onAddToCart }) {
+// `flat` gives the edge-to-edge, hairline-divided grid look on phones (shop page).
+export default function ProductCard({ product, onAddToCart, flat }) {
   const href = `/p/${product.id}`;
   const first = startingPrice(product);
   const lowest = lowestPrice(product);
@@ -11,7 +12,7 @@ export default function ProductCard({ product, onAddToCart }) {
   const minQty = minOrderQty(product);
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-ink/10 bg-white transition hover:-translate-y-1 hover:border-gold-500/60 hover:shadow-xl">
+    <article className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-ink/10 bg-white transition hover:-translate-y-1 hover:border-gold-500/60 hover:shadow-xl ${flat ? 'max-sm:rounded-none max-sm:border-0 max-sm:hover:translate-y-0 max-sm:hover:shadow-none' : ''}`}>
       <a href={href} onClick={linkHandler(href)} className="relative block aspect-square overflow-hidden bg-cream">
         <img
           src={product.image}

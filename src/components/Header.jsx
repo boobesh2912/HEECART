@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Phone, Search, ShoppingCart, X } from 'lucide-react';
 import { linkHandler, navigate } from '../lib/router';
 import { freeShippingOffer, offerScope } from '../lib/offer';
 import { formatINR } from '../lib/pricing';
+import { shopHref } from './ShopPage';
 
 function SearchBox({ search, className = '' }) {
   const initial = new URLSearchParams(search).get('q') || '';
@@ -11,12 +12,12 @@ function SearchBox({ search, className = '' }) {
   useEffect(() => setValue(initial), [initial]);
 
   const submit = text => {
-    const params = new URLSearchParams(window.location.pathname === '/' ? window.location.search : '');
+    // On the shop page keep the other filters; from anywhere else start a fresh search.
+    const onShop = window.location.pathname === '/shop';
+    const params = new URLSearchParams(onShop ? window.location.search : '');
     if (text.trim()) params.set('q', text.trim());
     else params.delete('q');
-    const qs = params.toString();
-    navigate(`/${qs ? `?${qs}` : ''}`, { replace: window.location.pathname === '/', keepScroll: true });
-    requestAnimationFrame(() => document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' }));
+    navigate(shopHref(Object.fromEntries(params)), { replace: onShop, keepScroll: onShop });
   };
 
   return (
@@ -63,7 +64,7 @@ function Announcements({ settings }) {
 }
 
 const NAV = [
-  { label: 'Shop all', href: '/#catalog' },
+  { label: 'Shop all', href: '/shop' },
   { label: 'Bestsellers', href: '/#bestsellers' },
   { label: 'Bulk savings', href: '/#bulk-savings' },
   { label: 'How it works', href: '/#how-to-order' },
@@ -71,14 +72,27 @@ const NAV = [
 
 function goToSection(e, href) {
   e.preventDefault();
+  if (!href.includes('#')) return navigate(href);
   const id = href.split('#')[1];
   if (window.location.pathname !== '/') navigate('/');
   requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }));
 }
 
 export default function Header({ settings, search, cartCount, onOpenCart }) {
+  const ref = useRef(null);
+
+  // Shares the header's height as --header-h so the shop's sticky filter bar sits right under it.
+  useEffect(() => {
+    const el = ref.current;
+    const update = () => document.documentElement.style.setProperty('--header-h', `${el.offsetHeight}px`);
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <header className="sticky top-0 z-40">
+    <header ref={ref} className="sticky top-0 z-40">
       <Announcements settings={settings} />
       <div className="border-b border-ink/10 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 sm:px-6 lg:px-8">

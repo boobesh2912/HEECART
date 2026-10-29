@@ -79,7 +79,7 @@ export default function Hero({ products, settings }) {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#catalog" className="btn-gold px-6 py-3.5 text-base shadow-lg shadow-gold-500/20">
+            <a href="/shop" onClick={linkHandler('/shop')} className="btn-gold px-6 py-3.5 text-base shadow-lg shadow-gold-500/20">
               Shop gift sets <ArrowRight size={18} />
             </a>
             <a

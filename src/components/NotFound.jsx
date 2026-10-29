@@ -7,7 +7,7 @@ export default function NotFound() {
       <p className="text-5xl font-extrabold text-gold-500">404</p>
       <h1 className="text-xl font-bold">We couldn't find that page</h1>
       <p className="text-sm text-ink/60">The product may have been removed or renamed.</p>
-      <a href="/" onClick={linkHandler('/')} className="btn-dark mt-2">See all gift sets</a>
+      <a href="/shop" onClick={linkHandler('/shop')} className="btn-dark mt-2">See all gift sets</a>
     </div>
   );
 }

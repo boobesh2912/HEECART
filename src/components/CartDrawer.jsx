@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowLeft, CheckCircle2, Lock, Minus, Plus, ShoppingCart, Tag, Trash2, Truck, X } from 'lucide-react';
 import WhatsAppIcon from './WhatsAppIcon';
-import { linkHandler } from '../lib/router';
+import { linkHandler, navigate } from '../lib/router';
 import { findCoupon } from '../lib/store';
 import { freeShippingOffer, pad, useCountdown } from '../lib/offer';
 import { cartTotals, formatINR, minOrderQty, unitPrice } from '../lib/pricing';
@@ -119,7 +119,7 @@ export default function CartDrawer({ view, onViewChange, items, settings, onUpda
             <ShoppingCart size={44} className="text-gold-500" />
             <p className="text-lg font-bold">Your cart is empty</p>
             <p className="text-sm text-ink/60">Our most-loved gift sets are waiting for you.</p>
-            <button onClick={() => { close(); requestAnimationFrame(() => document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' })); }} className="btn-dark mt-2">Start shopping</button>
+            <button onClick={() => { close(); navigate('/shop'); }} className="btn-dark mt-2">Start shopping</button>
           </div>
         ) : view === 'checkout' ? (
           <form onSubmit={placeOrder} className="flex flex-1 flex-col overflow-hidden">

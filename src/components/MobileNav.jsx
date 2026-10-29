@@ -4,21 +4,19 @@ import WhatsAppIcon from './WhatsAppIcon';
 import { navigate } from '../lib/router';
 import { whatsappLink } from '../lib/whatsapp';
 
-function goToCatalog() {
-  if (window.location.pathname !== '/') navigate('/');
-  requestAnimationFrame(() => document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' }));
-}
 
 export default function MobileNav({ settings, cartCount, onOpenCart }) {
+  const path = window.location.pathname;
   const waHref = whatsappLink(settings.whatsapp, 'Hi Heecart! I am looking for corporate gifts.');
   const item = 'flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] font-semibold';
+  const current = active => `${item} ${active ? 'text-gold-700' : ''}`;
 
   return (
     <>
       {/* Phones: bottom bar */}
       <nav className="fixed inset-x-0 bottom-0 z-40 flex border-t border-ink/10 bg-white/95 backdrop-blur md:hidden">
-        <button className={item} onClick={() => navigate('/')}><Home size={20} />Home</button>
-        <button className={item} onClick={goToCatalog}><LayoutGrid size={20} />Shop</button>
+        <button className={current(path === '/')} onClick={() => navigate('/')}><Home size={20} />Home</button>
+        <button className={current(path === '/shop')} onClick={() => navigate('/shop')}><LayoutGrid size={20} />Shop</button>
         <button className={`${item} relative`} onClick={onOpenCart}>
           <ShoppingCart size={20} />Cart
           {cartCount > 0 && (

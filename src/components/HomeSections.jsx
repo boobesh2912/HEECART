@@ -6,14 +6,14 @@ import {
 import ProductCard from './ProductCard';
 import WhatsAppIcon from './WhatsAppIcon';
 import Instagram from './InstagramIcon';
-import { navigate } from '../lib/router';
+import { linkHandler, navigate } from '../lib/router';
+import { shopHref } from './ShopPage';
 import { freeShippingOffer, offerScope, pad, useCountdown } from '../lib/offer';
 import { formatINR, savingsPercent, sortedTiers } from '../lib/pricing';
 import { whatsappLink } from '../lib/whatsapp';
 
 export function showCategory(id) {
-  navigate(id ? `/?c=${id}` : '/', { keepScroll: true });
-  requestAnimationFrame(() => document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' }));
+  navigate(shopHref({ c: id }));
 }
 
 function Eyebrow({ children, light }) {
@@ -46,7 +46,7 @@ export function OfferStrip({ settings }) {
               </span>
             ))}
           </div>
-          <a href="#catalog" className="hidden rounded-lg bg-ink px-4 py-2 text-xs font-bold text-white hover:bg-ink-700 sm:block">Shop now</a>
+          <a href="/shop" onClick={linkHandler('/shop')} className="hidden rounded-lg bg-ink px-4 py-2 text-xs font-bold text-white hover:bg-ink-700 sm:block">Shop now</a>
         </div>
       </div>
     </section>
@@ -107,7 +107,7 @@ export function Bestsellers({ products, settings, onAddToCart }) {
             <Eyebrow>Bestsellers</Eyebrow>
             <h2 className="mt-2 text-2xl font-extrabold sm:text-3xl">The gifts companies keep coming back for</h2>
           </div>
-          <a href="#catalog" className="hidden shrink-0 items-center gap-1 text-sm font-bold text-gold-700 hover:gap-2 sm:flex">View all <ArrowRight size={16} /></a>
+          <a href="/shop" onClick={linkHandler('/shop')} className="hidden shrink-0 items-center gap-1 text-sm font-bold text-gold-700 hover:gap-2 sm:flex">View all <ArrowRight size={16} /></a>
         </div>
         <div className="no-scrollbar -mx-4 mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0">
           {picks.map(p => (
@@ -115,6 +115,9 @@ export function Bestsellers({ products, settings, onAddToCart }) {
               <ProductCard product={p} settings={settings} onAddToCart={onAddToCart} />
             </div>
           ))}
+        </div>
+        <div className="mt-8 flex justify-center">
+          <a href="/shop" onClick={linkHandler('/shop')} className="btn-dark px-8">Browse all gifts <ArrowRight size={16} /></a>
         </div>
       </div>
     </section>
@@ -275,7 +278,7 @@ export function FinalCTA({ settings }) {
         <h2 className="mt-4 text-3xl font-extrabold sm:text-4xl">Your next gift could be the one they never forget.</h2>
         <p className="mt-3 text-white/60">Pick a set, add your logo, and we'll take care of the rest. It takes two minutes to order.</p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <a href="#catalog" className="btn-gold px-6 py-3.5 text-base">Start shopping <ArrowRight size={18} /></a>
+          <a href="/shop" onClick={linkHandler('/shop')} className="btn-gold px-6 py-3.5 text-base">Start shopping <ArrowRight size={18} /></a>
           <a href={whatsappLink(settings.whatsapp, 'Hi Heecart! I need help choosing corporate gifts.')} target="_blank" rel="noopener" className="btn-whatsapp px-6 py-3.5 text-base">
             <WhatsAppIcon size={18} /> Talk to us on WhatsApp
           </a>
