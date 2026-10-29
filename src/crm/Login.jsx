@@ -46,11 +46,11 @@ export default function Login({ onSuccess }) {
                 required
                 autoFocus
               />
-              <button type="button" onClick={() => setShow(s => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-ink/40 hover:text-ink" aria-label={show ? 'Hide password' : 'Show password'}>
+              <button type="button" onClick={() => setShow(s => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-ink/60 hover:text-ink" aria-label={show ? 'Hide password' : 'Show password'}>
                 {show ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
-            <p className="mt-1.5 text-[11px] text-ink/50">This device stays signed in for 30 days.</p>
+            <p className="mt-1.5 text-xs text-ink/60">This device stays signed in for 30 days.</p>
           </div>
           {error && <p className="text-xs font-semibold text-red-600">{error}</p>}
           <button className="btn-dark w-full" disabled={busy || !password}>{busy ? 'Checking…' : 'Sign in'}</button>

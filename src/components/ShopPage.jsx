@@ -96,7 +96,7 @@ function FilterGroups({ filters, setFilters, categories, only }) {
             {p.label}
           </CheckRow>
         ))}
-        <p className="mt-1 text-[11px] text-ink/50">Price for 1 piece. Bulk orders cost less.</p>
+        <p className="mt-1 text-xs text-ink/60">Price for 1 piece. Bulk orders cost less.</p>
       </div>
     ),
     eco: (
@@ -122,12 +122,12 @@ function Sidebar({ filters, categories }) {
         <div className="flex items-center justify-between">
           <p className="text-sm font-extrabold uppercase tracking-wider">Filters</p>
           {activeCount(filters) > 0 && (
-            <button onClick={() => writeFilters({ ...filters, c: [], price: '', eco: false })} className="text-xs font-bold text-gold-700 hover:underline">Clear all</button>
+            <button onClick={() => writeFilters({ ...filters, c: [], price: '', eco: false })} className="text-xs font-bold text-gold-800 hover:underline">Clear all</button>
           )}
         </div>
         {FILTER_TABS.map(tab => (
           <div key={tab.id} className="border-t border-ink/10 pt-4">
-            <p className="mb-1 text-xs font-bold uppercase tracking-wider text-ink/50">{tab.label}</p>
+            <p className="mb-1 text-xs font-bold uppercase tracking-wider text-ink/60">{tab.label}</p>
             {groups[tab.id]}
           </div>
         ))}
@@ -155,7 +155,7 @@ function Sheet({ title, onClose, children, footer, full }) {
       <div className={`animate-fade-in relative flex w-full flex-col rounded-t-3xl bg-white ${full ? 'h-[85vh]' : 'max-h-[85vh]'}`}>
         <div className="flex items-center justify-between border-b border-ink/10 px-5 py-4">
           <p className="text-base font-extrabold">{title}</p>
-          <button onClick={onClose} className="grid h-9 w-9 place-items-center rounded-full hover:bg-cream" aria-label="Close"><X size={18} /></button>
+          <button onClick={onClose} className="grid h-11 w-11 place-items-center rounded-full hover:bg-cream" aria-label="Close"><X size={18} /></button>
         </div>
         {children}
         {footer}
@@ -206,7 +206,7 @@ function FilterSheet({ filters, categories, products, onClose }) {
                 className={`flex w-full items-center justify-between border-l-4 px-3 py-4 text-left text-sm ${tab === t.id ? 'border-gold-500 bg-white font-bold' : 'border-transparent text-ink/70'}`}
               >
                 {t.label}
-                {count > 0 && <span className="grid h-5 min-w-5 place-items-center rounded-full bg-ink px-1 text-[10px] font-bold text-gold-400">{count}</span>}
+                {count > 0 && <span className="grid h-5 min-w-5 place-items-center rounded-full bg-ink px-1 text-xs font-bold text-gold-400">{count}</span>}
               </button>
             );
           })}
@@ -235,7 +235,7 @@ export default function ShopPage({ products, categories, search, settings, onAdd
   const filterCount = activeCount(filters);
 
   const chip = active =>
-    `shrink-0 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition ${
+    `inline-flex min-h-11 shrink-0 items-center rounded-full border px-4 text-xs font-semibold transition ${
       active ? 'border-ink bg-ink text-gold-400' : 'border-ink/15 bg-white text-ink/70 hover:border-ink/40'
     }`;
 
@@ -256,13 +256,13 @@ export default function ShopPage({ products, categories, search, settings, onAdd
             <ArrowDownUp size={16} />
             <span className="flex flex-col items-start leading-tight">
               Sort
-              {filters.sort && <span className="text-[10px] font-medium text-gold-700">{sortLabel}</span>}
+              {filters.sort && <span className="text-xs font-medium text-gold-800">{sortLabel}</span>}
             </span>
           </button>
           <button onClick={() => setSheet('filter')} className="flex flex-1 items-center justify-center gap-2 py-3 text-sm font-semibold">
             <SlidersHorizontal size={16} />
             Filter
-            {filterCount > 0 && <span className="grid h-5 min-w-5 place-items-center rounded-full bg-gold-500 px-1 text-[10px] font-bold">{filterCount}</span>}
+            {filterCount > 0 && <span className="grid h-5 min-w-5 place-items-center rounded-full bg-gold-500 px-1 text-xs font-bold">{filterCount}</span>}
           </button>
         </div>
         <div className="no-scrollbar flex gap-2 overflow-x-auto px-4 py-2.5">
@@ -281,8 +281,8 @@ export default function ShopPage({ products, categories, search, settings, onAdd
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-end justify-between gap-3 bg-white px-4 py-4 sm:rounded-2xl sm:border sm:border-ink/10 sm:px-5 lg:mb-5">
             <div>
-              <nav className="text-xs text-ink/50">
-                <a href="/" onClick={linkHandler('/')} className="hover:text-ink">Home</a> / <span>Shop</span>
+              <nav className="text-xs text-ink/60">
+                <a href="/" onClick={linkHandler('/')} className="inline-block py-2 hover:text-ink">Home</a> / <span>Shop</span>
               </nav>
               <h1 className="mt-1 text-xl font-extrabold sm:text-2xl">{title}</h1>
               <p className="text-xs text-ink/60">Prices are per piece. Order more and every piece costs less.</p>

@@ -14,7 +14,7 @@ export function HowToOrder({ settings }) {
   return (
     <section id="how-to-order" className="scroll-mt-28 bg-cream">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold-600">How it works</p>
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold-800">How it works</p>
         <h2 className="mt-2 text-2xl font-extrabold sm:text-3xl">From cart to doorstep in four easy steps</h2>
         <ol className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {STEPS.map(({ icon: Icon, title, text }, i) => (
@@ -79,7 +79,7 @@ export function FAQ({ settings }) {
   return (
     <section>
       <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 md:py-16">
-        <p className="text-center text-xs font-bold uppercase tracking-[0.2em] text-gold-600">FAQ</p>
+        <p className="text-center text-xs font-bold uppercase tracking-[0.2em] text-gold-800">FAQ</p>
         <h2 className="mt-2 text-center text-2xl font-extrabold sm:text-3xl">Everything you need to know</h2>
         <div className="mt-8 divide-y divide-ink/10 rounded-3xl border border-ink/10 bg-white">
           {faqs(settings).map((item, i) => (

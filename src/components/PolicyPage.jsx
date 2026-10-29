@@ -226,11 +226,11 @@ export default function PolicyPage({ policy, settings }) {
   return (
     <div className="bg-cream/50">
       <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 md:py-14">
-        <a href="/" onClick={linkHandler('/')} className="flex items-center gap-1 text-xs text-ink/50 hover:text-ink">
+        <a href="/" onClick={linkHandler('/')} className="flex items-center gap-1 text-xs text-ink/60 hover:text-ink">
           <ChevronLeft size={14} /> Home
         </a>
         <h1 className="mt-4 text-3xl font-extrabold sm:text-4xl">{policy.title}</h1>
-        <p className="mt-2 text-xs text-ink/50">Last updated: {UPDATED}</p>
+        <p className="mt-2 text-xs text-ink/60">Last updated: {UPDATED}</p>
 
         <div className="mt-8 rounded-3xl bg-white p-6 shadow-sm sm:p-10">
           <p className="text-sm leading-relaxed text-ink/80">{policy.intro(settings)}</p>

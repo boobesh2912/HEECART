@@ -20,16 +20,16 @@ export default function ProductCard({ product, onAddToCart, flat }) {
           loading="lazy"
           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
         />
-        <span className="absolute left-2 top-2 rounded-md bg-ink px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-gold-400">
+        <span className="absolute left-2 top-2 rounded-md bg-ink px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-gold-400">
           {product.set_type}
         </span>
         {save > 0 && (
-          <span className="absolute right-2 top-2 rounded-md bg-green-600 px-2 py-1 text-[10px] font-bold uppercase text-white">
+          <span className="absolute right-2 top-2 rounded-md bg-green-600 px-2 py-1 text-[11px] font-bold uppercase text-white">
             Save up to {save}%
           </span>
         )}
         {product.badge && (
-          <span className="absolute bottom-2 left-2 rounded-md bg-gold-500 px-2 py-1 text-[10px] font-bold uppercase text-ink">{product.badge}</span>
+          <span className="absolute bottom-2 left-2 rounded-md bg-gold-500 px-2 py-1 text-[11px] font-bold uppercase text-ink">{product.badge}</span>
         )}
         {product.tags?.includes('eco') && (
           <span className="absolute bottom-2 right-2 grid h-7 w-7 place-items-center rounded-full bg-white/90 text-green-700" title="Eco-friendly">
@@ -40,22 +40,22 @@ export default function ProductCard({ product, onAddToCart, flat }) {
 
       <div className="flex flex-1 flex-col p-3 sm:p-4">
         <a href={href} onClick={linkHandler(href)}>
-          <h3 className="line-clamp-2 text-sm font-semibold leading-snug hover:text-gold-700">{product.name}</h3>
+          <h3 className="line-clamp-2 text-sm font-semibold leading-snug hover:text-gold-800">{product.name}</h3>
         </a>
 
         <div className="mt-auto pt-3">
           {first != null && (
             <p className="text-base font-extrabold sm:text-lg">
               {formatINR(first)}
-              <span className="text-xs font-medium text-ink/50"> /pc{minQty > 1 ? ` · min ${minQty}` : ''}</span>
+              <span className="text-xs font-medium text-ink/60"> /pc{minQty > 1 ? ` · min ${minQty}` : ''}</span>
             </p>
           )}
           {lowest != null && lowest < first && (
-            <p className="text-[11px] font-semibold text-green-700">Just {formatINR(lowest)}/pc in bulk</p>
+            <p className="text-xs font-semibold text-green-700">Just {formatINR(lowest)}/pc in bulk</p>
           )}
           <button
             onClick={() => onAddToCart(product)}
-            className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl bg-ink py-2.5 text-xs font-bold text-white transition hover:bg-gold-500 hover:text-ink"
+            className="mt-3 flex min-h-11 w-full items-center justify-center gap-1.5 rounded-xl bg-ink text-xs font-bold text-white transition hover:bg-gold-500 hover:text-ink"
           >
             <ShoppingCart size={14} /> Add to cart
           </button>

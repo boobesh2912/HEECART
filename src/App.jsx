@@ -10,7 +10,7 @@ export default function App() {
 
   if (route.path === CRM_PATH) {
     return (
-      <Suspense fallback={<div className="grid min-h-screen place-items-center text-sm text-ink/50">Loading…</div>}>
+      <Suspense fallback={<div className="grid min-h-screen place-items-center text-sm text-ink/60">Loading…</div>}>
         <CrmApp />
       </Suspense>
     );

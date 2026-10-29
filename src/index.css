@@ -10,6 +10,21 @@
   ::selection {
     @apply bg-gold-500 text-ink;
   }
+  /* Clear keyboard focus on every control, without showing it on mouse clicks. */
+  :focus-visible {
+    outline: 3px solid #f5b301;
+    outline-offset: 2px;
+  }
+}
+
+/* Respect the "reduce motion" setting for every animation and transition, not just the hero. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 @layer components {
@@ -29,7 +44,7 @@
     @apply btn border border-ink/15 bg-white text-ink hover:border-ink/40;
   }
   .input {
-    @apply w-full rounded-xl border border-ink/15 bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-ink/40 focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500/30;
+    @apply min-h-11 w-full rounded-xl border border-ink/15 bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-ink/60 focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500/30;
   }
   .label {
     @apply mb-1.5 block text-xs font-semibold text-ink/70;

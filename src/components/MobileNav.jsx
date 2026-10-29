@@ -8,8 +8,8 @@ import { whatsappLink } from '../lib/whatsapp';
 export default function MobileNav({ settings, cartCount, onOpenCart }) {
   const path = window.location.pathname;
   const waHref = whatsappLink(settings.whatsapp, 'Hi Heecart! I am looking for corporate gifts.');
-  const item = 'flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] font-semibold';
-  const current = active => `${item} ${active ? 'text-gold-700' : ''}`;
+  const item = 'flex flex-1 flex-col items-center gap-0.5 py-2 text-[11px] font-semibold';
+  const current = active => `${item} ${active ? 'text-gold-800' : ''}`;
 
   return (
     <>
@@ -20,7 +20,7 @@ export default function MobileNav({ settings, cartCount, onOpenCart }) {
         <button className={`${item} relative`} onClick={onOpenCart}>
           <ShoppingCart size={20} />Cart
           {cartCount > 0 && (
-            <span className="absolute right-[calc(50%-18px)] top-1 grid h-4 min-w-4 place-items-center rounded-full bg-gold-500 px-1 text-[9px] font-bold">{cartCount}</span>
+            <span className="absolute right-[calc(50%-18px)] top-1 grid h-4 min-w-4 place-items-center rounded-full bg-gold-500 px-1 text-xs font-bold">{cartCount}</span>
           )}
         </button>
         <a className={`${item} text-[#128c4a]`} href={waHref} target="_blank" rel="noopener"><WhatsAppIcon size={20} />WhatsApp</a>

@@ -45,13 +45,13 @@ export default function ProductsTab({ data, run, busy }) {
   return (
     <div>
       <div className="flex flex-wrap items-center gap-3">
-        <h1 className="mr-auto text-xl font-extrabold">Products <span className="text-sm font-medium text-ink/50">({products.length})</span></h1>
+        <h1 className="mr-auto text-xl font-extrabold">Products <span className="text-sm font-medium text-ink/60">({products.length})</span></h1>
         <button onClick={() => setEditing({})} className="btn-gold" disabled={busy}><Plus size={16} /> Add product</button>
       </div>
 
       <div className="mt-4 flex flex-col gap-2 sm:flex-row">
         <div className="relative flex-1">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/40" />
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/60" />
           <input className="input pl-9" placeholder="Search products" value={query} onChange={e => setQuery(e.target.value)} />
         </div>
         <select className="input sm:w-64" value={category} onChange={e => setCategory(e.target.value)}>
@@ -67,12 +67,12 @@ export default function ProductsTab({ data, run, busy }) {
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-semibold">
                 {product.name}
-                {!product.active && <span className="ml-2 rounded bg-ink/10 px-1.5 py-0.5 text-[10px] font-bold uppercase text-ink/60">Hidden</span>}
+                {!product.active && <span className="ml-2 rounded bg-ink/10 px-1.5 py-0.5 text-[11px] font-bold uppercase text-ink/60">Hidden</span>}
               </p>
-              <p className="truncate text-xs text-ink/50">{product.set_type} · {categoryName(product.category)}</p>
+              <p className="truncate text-xs text-ink/60">{product.set_type} · {categoryName(product.category)}</p>
               <p className="text-xs font-semibold">
                 {startingPrice(product) != null ? formatINR(startingPrice(product)) : '—'}
-                {lowestPrice(product) < startingPrice(product) && <span className="font-normal text-ink/50"> → {formatINR(lowestPrice(product))} bulk</span>}
+                {lowestPrice(product) < startingPrice(product) && <span className="font-normal text-ink/60"> → {formatINR(lowestPrice(product))} bulk</span>}
               </p>
             </div>
             <div className="flex shrink-0 flex-wrap justify-end gap-1">
@@ -88,7 +88,7 @@ export default function ProductsTab({ data, run, busy }) {
             </div>
           </li>
         ))}
-        {visible.length === 0 && <li className="py-12 text-center text-sm text-ink/50">No products match.</li>}
+        {visible.length === 0 && <li className="py-12 text-center text-sm text-ink/60">No products match.</li>}
       </ul>
 
       {editing && (

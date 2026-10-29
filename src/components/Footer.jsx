@@ -75,7 +75,7 @@ export default function Footer({ settings, categories }) {
         </div>
       </div>
       <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-white/40 sm:flex-row sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-white/60 sm:flex-row sm:px-6 lg:px-8">
           <p>© {new Date().getFullYear()} Heecart Gifts and More, Chennai. All rights reserved.</p>
           <p>
             Website developed with <span role="img" aria-label="love">❤️</span> by{' '}

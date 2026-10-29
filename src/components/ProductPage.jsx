@@ -22,7 +22,7 @@ const friendlyLabel = label => label.replace(/\bPcs?\b/i, m => (m.toLowerCase() 
 function ShippingNote({ settings, total }) {
   const offer = freeShippingOffer(settings);
   const left = useCountdown(offer?.end);
-  if (!offer || !left) return <p className="text-[11px] text-ink/50">+ GST. Shipping is confirmed on WhatsApp.</p>;
+  if (!offer || !left) return <p className="text-xs text-ink/60">+ GST. Shipping is confirmed on WhatsApp.</p>;
   const time = `${left.days ? `${left.days}d ` : ''}${pad(left.hours)}:${pad(left.minutes)}:${pad(left.seconds)}`;
   return total >= offer.min ? (
     <p className="flex items-center gap-1.5 text-xs font-semibold text-green-700">
@@ -70,14 +70,14 @@ export default function ProductPage({ product, products, categories, settings, o
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-      <nav className="flex items-center gap-1 text-xs text-ink/50">
-        <a href="/" onClick={linkHandler('/')} className="flex items-center gap-1 hover:text-ink">
+      <nav className="flex items-center gap-1 text-xs text-ink/60">
+        <a href="/" onClick={linkHandler('/')} className="flex min-h-11 items-center gap-1 hover:text-ink">
           <ChevronLeft size={14} /> Home
         </a>
         {category && (
           <>
             <span>/</span>
-            <a href={`/shop?c=${category.id}`} onClick={linkHandler(`/shop?c=${category.id}`)} className="hover:text-ink">{category.name}</a>
+            <a href={`/shop?c=${category.id}`} onClick={linkHandler(`/shop?c=${category.id}`)} className="flex min-h-11 items-center hover:text-ink">{category.name}</a>
           </>
         )}
       </nav>
@@ -117,8 +117,8 @@ export default function ProductPage({ product, products, categories, settings, o
           <h1 className="mt-2 text-2xl font-extrabold leading-tight sm:text-3xl">{product.name}</h1>
           <p className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-extrabold">{formatINR(price || regular)}</span>
-            <span className="text-sm text-ink/50">per piece</span>
-            {price && price < regular && <span className="text-sm text-ink/40 line-through">{formatINR(regular)}</span>}
+            <span className="text-sm text-ink/60">per piece</span>
+            {price && price < regular && <span className="text-sm text-ink/60 line-through">{formatINR(regular)}</span>}
           </p>
           {product.description && <p className="mt-4 text-sm leading-relaxed text-ink/70">{product.description}</p>}
 
@@ -148,8 +148,8 @@ export default function ProductPage({ product, products, categories, settings, o
                       {selected && <Check size={12} strokeWidth={3} />}
                     </span>
                     <span className="block pr-6 text-xs font-semibold text-ink/60">{friendlyLabel(tier.label)}</span>
-                    <span className="mt-1 block text-lg font-extrabold">{formatINR(tier.price)}<span className="text-[11px] font-medium text-ink/50">/pc</span></span>
-                    <span className={`mt-1 inline-block rounded-md px-1.5 py-0.5 text-[10px] font-bold ${save ? 'bg-green-100 text-green-800' : 'bg-ink/5 text-ink/50'}`}>
+                    <span className="mt-1 block text-lg font-extrabold">{formatINR(tier.price)}<span className="text-xs font-medium text-ink/60">/pc</span></span>
+                    <span className={`mt-1 inline-block rounded-md px-1.5 py-0.5 text-xs font-bold ${save ? 'bg-green-100 text-green-800' : 'bg-ink/5 text-ink/60'}`}>
                       {save ? `SAVE ${save}%` : 'Regular price'}
                     </span>
                   </button>
@@ -160,7 +160,7 @@ export default function ProductPage({ product, products, categories, settings, o
             <div className="mt-4 flex flex-wrap items-center gap-3">
               <span className="text-xs font-semibold text-ink/70">Exact quantity:</span>
               <div className="flex items-center rounded-xl border border-ink/15">
-                <button onClick={() => setQuantity(validQty - 1)} className="grid h-10 w-10 place-items-center text-ink/60 hover:text-ink" aria-label="Decrease quantity"><Minus size={16} /></button>
+                <button onClick={() => setQuantity(validQty - 1)} className="grid h-11 w-11 place-items-center text-ink/60 hover:text-ink" aria-label="Decrease quantity"><Minus size={16} /></button>
                 <input
                   type="number"
                   inputMode="numeric"
@@ -168,12 +168,12 @@ export default function ProductPage({ product, products, categories, settings, o
                   value={qty}
                   onChange={e => setQty(e.target.value === '' ? '' : Number(e.target.value))}
                   onBlur={() => setQuantity(Number(qty))}
-                  className="h-10 w-20 border-x border-ink/15 text-center text-sm font-bold focus:outline-none"
+                  className="h-11 w-20 border-x border-ink/15 text-center text-sm font-bold"
                   aria-label="Quantity"
                 />
-                <button onClick={() => setQuantity(validQty + 1)} className="grid h-10 w-10 place-items-center text-ink/60 hover:text-ink" aria-label="Increase quantity"><Plus size={16} /></button>
+                <button onClick={() => setQuantity(validQty + 1)} className="grid h-11 w-11 place-items-center text-ink/60 hover:text-ink" aria-label="Increase quantity"><Plus size={16} /></button>
               </div>
-              <span className="text-[11px] text-ink/50">Need 20 or 250? Type any number.</span>
+              <span className="text-xs text-ink/60">Need 20 or 250? Type any number.</span>
             </div>
 
             {nextTier && price && (
@@ -191,7 +191,7 @@ export default function ProductPage({ product, products, categories, settings, o
           <div className="mt-7">
             <h2 className="flex items-center gap-2 text-sm font-extrabold">
               <span className="grid h-6 w-6 place-items-center rounded-full bg-ink text-xs text-gold-400">2</span>
-              Personalise it <span className="font-medium text-ink/50">(optional)</span>
+              Personalise it <span className="font-medium text-ink/60">(optional)</span>
             </h2>
             <input
               className="input mt-3"
@@ -201,7 +201,7 @@ export default function ProductPage({ product, products, categories, settings, o
               maxLength={80}
               aria-label="Name or company to print"
             />
-            <p className="mt-1.5 text-[11px] text-ink/50">Want your logo? Send it to us on WhatsApp after you place your order.</p>
+            <p className="mt-1.5 text-xs text-ink/60">Want your logo? Send it to us on WhatsApp after you place your order.</p>
           </div>
 
           {/* Total + actions */}
@@ -215,7 +215,7 @@ export default function ProductPage({ product, products, categories, settings, o
                   </div>
                   {saved > 0 && (
                     <div className="text-right">
-                      <p className="text-xs text-ink/40 line-through">{formatINR(regular * quantity)}</p>
+                      <p className="text-xs text-ink/60 line-through">{formatINR(regular * quantity)}</p>
                       <p className="rounded-lg bg-green-600 px-2 py-1 text-xs font-bold text-white">You save {formatINR(saved)}</p>
                     </div>
                   )}
@@ -239,11 +239,11 @@ export default function ProductPage({ product, products, categories, settings, o
                 href={whatsappLink(settings.whatsapp, `Hi Heecart! I have a question about ${product.name}: ${productUrl(product.id)}`)}
                 target="_blank"
                 rel="noopener"
-                className="flex items-center gap-1.5 font-semibold text-[#128c4a] hover:underline"
+                className="flex min-h-11 items-center gap-1.5 font-semibold text-[#128c4a] hover:underline"
               >
                 <WhatsAppIcon size={15} /> Questions? Ask us on WhatsApp
               </a>
-              <button onClick={share} className="flex items-center gap-1.5 font-semibold text-ink/60 hover:text-ink" aria-label="Share product link">
+              <button onClick={share} className="flex min-h-11 items-center gap-1.5 font-semibold text-ink/60 hover:text-ink" aria-label="Share product link">
                 {copied ? <><Link2 size={14} /> Link copied</> : <><Share2 size={14} /> Share</>}
               </button>
             </div>
@@ -269,7 +269,7 @@ export default function ProductPage({ product, products, categories, settings, o
               </ul>
             </div>
           )}
-          <p className="mt-6 text-[11px] text-ink/40">Prices are per piece and exclude GST. Colours may vary slightly from the photos.</p>
+          <p className="mt-6 text-xs text-ink/60">Prices are per piece and exclude GST. Colours may vary slightly from the photos.</p>
         </div>
       </div>
 

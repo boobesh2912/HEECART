@@ -22,16 +22,16 @@ function SearchBox({ search, className = '' }) {
 
   return (
     <form className={`relative ${className}`} onSubmit={e => { e.preventDefault(); submit(value); }} role="search">
-      <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink/40" />
+      <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink/60" />
       <input
         value={value}
         onChange={e => setValue(e.target.value)}
         placeholder="Search diaries, bottles, pens, eco kits…"
-        className="input rounded-full bg-cream/60 py-2.5 pl-10 pr-9"
+        className="input min-h-11 rounded-full bg-cream/60 py-2.5 pl-10 pr-9"
         aria-label="Search products"
       />
       {value && (
-        <button type="button" onClick={() => { setValue(''); submit(''); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-ink/40 hover:text-ink" aria-label="Clear search">
+        <button type="button" onClick={() => { setValue(''); submit(''); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-ink/60 hover:text-ink" aria-label="Clear search">
           <X size={16} />
         </button>
       )}
@@ -57,7 +57,7 @@ function Announcements({ settings }) {
 
   if (!messages.length) return null;
   return (
-    <div className="bg-ink px-4 py-2 text-center text-[11px] font-semibold tracking-wide text-gold-400 sm:text-xs" aria-live="polite">
+    <div className="bg-ink px-4 py-2 text-center text-xs font-semibold tracking-wide text-gold-400 sm:text-xs" aria-live="polite">
       <span key={index} className="animate-fade-in inline-block">{messages[index % messages.length]}</span>
     </div>
   );
@@ -115,11 +115,11 @@ export default function Header({ settings, search, cartCount, onOpenCart }) {
               <Phone size={16} className="text-gold-600" />
               {settings.phone_display}
             </a>
-            <button onClick={onOpenCart} className="relative flex items-center gap-2 rounded-full bg-ink px-4 py-2.5 text-sm font-semibold text-white hover:bg-ink-700" aria-label={`Cart, ${cartCount} items`}>
+            <button onClick={onOpenCart} className="relative flex min-h-11 items-center gap-2 rounded-full bg-ink px-4 text-sm font-semibold text-white hover:bg-ink-700" aria-label={`Cart, ${cartCount} items`}>
               <ShoppingCart size={17} className="text-gold-400" />
               <span className="hidden sm:inline">Cart</span>
               {cartCount > 0 && (
-                <span className="grid h-5 min-w-5 place-items-center rounded-full bg-gold-500 px-1 text-[11px] font-bold text-ink">{cartCount}</span>
+                <span className="grid h-5 min-w-5 place-items-center rounded-full bg-gold-500 px-1 text-xs font-bold text-ink">{cartCount}</span>
               )}
             </button>
           </div>

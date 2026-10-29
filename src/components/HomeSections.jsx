@@ -17,7 +17,7 @@ export function showCategory(id) {
 }
 
 function Eyebrow({ children, light }) {
-  return <p className={`text-xs font-bold uppercase tracking-[0.2em] ${light ? 'text-gold-400' : 'text-gold-600'}`}>{children}</p>;
+  return <p className={`text-xs font-bold uppercase tracking-[0.2em] ${light ? 'text-gold-400' : 'text-gold-800'}`}>{children}</p>;
 }
 
 export function OfferStrip({ settings }) {
@@ -42,7 +42,7 @@ export function OfferStrip({ settings }) {
           <div className="flex gap-1.5 font-mono" role="timer" aria-label="Time left in the offer">
             {units.map(([value, unit]) => (
               <span key={unit} className="min-w-[3rem] rounded-lg bg-ink px-2 py-1.5 text-center text-sm font-bold text-gold-400">
-                {pad(value)}<span className="text-[10px] text-white/60">{unit}</span>
+                {pad(value)}<span className="text-xs text-white/60">{unit}</span>
               </span>
             ))}
           </div>
@@ -82,7 +82,7 @@ export function CategoryTiles({ products, categories }) {
               <img src={c.cover.image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-80 transition duration-500 group-hover:scale-110 group-hover:opacity-60" />
               <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6">
-                <p className="text-[11px] font-semibold text-gold-300 sm:text-xs">{CATEGORY_TAGLINES[c.id] || 'Explore the collection'}</p>
+                <p className="text-xs font-semibold text-gold-300 sm:text-xs">{CATEGORY_TAGLINES[c.id] || 'Explore the collection'}</p>
                 <p className="mt-1 text-base font-extrabold text-white sm:text-xl">{c.name}</p>
                 <span className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-gold-400 group-hover:gap-2">
                   Shop now <ArrowRight size={14} />
@@ -107,7 +107,7 @@ export function Bestsellers({ products, settings, onAddToCart }) {
             <Eyebrow>Bestsellers</Eyebrow>
             <h2 className="mt-2 text-2xl font-extrabold sm:text-3xl">The gifts companies keep coming back for</h2>
           </div>
-          <a href="/shop" onClick={linkHandler('/shop')} className="hidden shrink-0 items-center gap-1 text-sm font-bold text-gold-700 hover:gap-2 sm:flex">View all <ArrowRight size={16} /></a>
+          <a href="/shop" onClick={linkHandler('/shop')} className="hidden shrink-0 items-center gap-1 text-sm font-bold text-gold-800 hover:gap-2 sm:flex">View all <ArrowRight size={16} /></a>
         </div>
         <div className="no-scrollbar -mx-4 mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0">
           {picks.map(p => (
@@ -184,7 +184,7 @@ export function BulkSavings({ products }) {
           <div className="flex items-center gap-4">
             <img src={example.image} alt="" className="h-16 w-16 rounded-2xl object-cover" />
             <div>
-              <p className="text-xs font-semibold text-ink/50">Example</p>
+              <p className="text-xs font-semibold text-ink/60">Example</p>
               <p className="font-bold">{example.name}</p>
             </div>
           </div>
@@ -197,8 +197,8 @@ export function BulkSavings({ products }) {
                     <span className="font-semibold">{t.label}</span>
                     <span>
                       <strong>{formatINR(t.price)}</strong>
-                      <span className="text-ink/50">/pc</span>
-                      {save > 0 && <span className="ml-2 rounded-md bg-green-100 px-1.5 py-0.5 text-[11px] font-bold text-green-800">Save {save}%</span>}
+                      <span className="text-ink/60">/pc</span>
+                      {save > 0 && <span className="ml-2 rounded-md bg-green-100 px-1.5 py-0.5 text-xs font-bold text-green-800">Save {save}%</span>}
                     </span>
                   </div>
                   <div className="mt-1.5 h-2.5 overflow-hidden rounded-full bg-cream">
@@ -283,7 +283,7 @@ export function FinalCTA({ settings }) {
             <WhatsAppIcon size={18} /> Talk to us on WhatsApp
           </a>
         </div>
-        <p className="mt-6 flex items-center justify-center gap-2 text-xs text-white/40"><Briefcase size={14} /> Bulk & corporate orders welcome</p>
+        <p className="mt-6 flex items-center justify-center gap-2 text-xs text-white/60"><Briefcase size={14} /> Bulk & corporate orders welcome</p>
       </div>
     </section>
   );

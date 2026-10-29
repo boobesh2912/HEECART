@@ -45,7 +45,7 @@ export default function CategoriesTab({ data, run, busy }) {
           <li key={row.id} className="flex items-center gap-2 rounded-2xl border border-ink/10 bg-white p-3">
             <input className="input flex-1" value={row.name} onChange={e => edit(row.id, 'name', e.target.value)} aria-label="Category name" />
             <input type="number" className="input w-20" value={row.sort_order} onChange={e => edit(row.id, 'sort_order', e.target.value)} aria-label="Position" />
-            <span className="hidden w-20 text-center text-xs text-ink/50 sm:block">{count(row.id)} products</span>
+            <span className="hidden w-20 text-center text-xs text-ink/60 sm:block">{count(row.id)} products</span>
             <button
               onClick={() => run(upsertCategory({ ...row, name: row.name.trim(), sort_order: Number(row.sort_order) || 0 }), `Updated category "${row.name.trim()}"`)}
               disabled={busy || !changed(row) || !row.name.trim()}

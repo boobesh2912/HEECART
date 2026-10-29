@@ -96,18 +96,18 @@ export default function Hero({ products, settings }) {
             {settings.trust_orders && (
               <div>
                 <dd className="text-xl font-extrabold text-gold-400 sm:text-2xl">{settings.trust_orders}</dd>
-                <dt className="text-[11px] text-white/50 sm:text-xs">Orders delivered</dt>
+                <dt className="text-xs text-white/50 sm:text-xs">Orders delivered</dt>
               </div>
             )}
             {settings.trust_since && (
               <div>
                 <dd className="text-xl font-extrabold text-gold-400 sm:text-2xl">Since {settings.trust_since}</dd>
-                <dt className="text-[11px] text-white/50 sm:text-xs">Trusted by businesses</dt>
+                <dt className="text-xs text-white/50 sm:text-xs">Trusted by businesses</dt>
               </div>
             )}
             <div>
               <dd className="text-xl font-extrabold text-gold-400 sm:text-2xl">1 pc+</dd>
-              <dt className="text-[11px] text-white/50 sm:text-xs">No big minimums</dt>
+              <dt className="text-xs text-white/50 sm:text-xs">No big minimums</dt>
             </div>
           </dl>
           <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-xs text-white/60">

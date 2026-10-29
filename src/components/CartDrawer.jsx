@@ -95,10 +95,10 @@ export default function CartDrawer({ view, onViewChange, items, settings, onUpda
       <div className="animate-fade-in relative flex h-full w-full max-w-md flex-col bg-white shadow-2xl">
         <div className="flex items-center gap-3 border-b border-ink/10 px-5 py-4">
           {view === 'checkout' && (
-            <button onClick={() => onViewChange('cart')} className="grid h-9 w-9 place-items-center rounded-full hover:bg-cream" aria-label="Back to cart"><ArrowLeft size={18} /></button>
+            <button onClick={() => onViewChange('cart')} className="grid h-11 w-11 place-items-center rounded-full hover:bg-cream" aria-label="Back to cart"><ArrowLeft size={18} /></button>
           )}
           <h2 className="flex-1 text-lg font-extrabold">{title}</h2>
-          <button onClick={close} className="grid h-9 w-9 place-items-center rounded-full hover:bg-cream" aria-label="Close"><X size={18} /></button>
+          <button onClick={close} className="grid h-11 w-11 place-items-center rounded-full hover:bg-cream" aria-label="Close"><X size={18} /></button>
         </div>
 
         {view === 'done' && placed ? (
@@ -112,7 +112,7 @@ export default function CartDrawer({ view, onViewChange, items, settings, onUpda
             <button onClick={() => openWhatsApp(settings.whatsapp, placed.message)} className="btn-whatsapp mt-2">
               <WhatsAppIcon size={18} /> WhatsApp didn't open? Tap here
             </button>
-            <button onClick={close} className="text-sm font-semibold text-ink/60 underline">Continue shopping</button>
+            <button onClick={close} className="min-h-11 text-sm font-semibold text-ink/60 underline">Continue shopping</button>
           </div>
         ) : items.length === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-3 p-8 text-center">
@@ -155,7 +155,7 @@ export default function CartDrawer({ view, onViewChange, items, settings, onUpda
               <button className="btn-whatsapp mt-4 w-full py-3.5 text-base">
                 <WhatsAppIcon size={20} /> Place order on WhatsApp
               </button>
-              <p className="mt-2 flex items-center justify-center gap-1.5 text-[11px] text-ink/50"><Lock size={12} /> No payment now. Pay by GPay / UPI after we confirm.</p>
+              <p className="mt-2 flex items-center justify-center gap-1.5 text-xs text-ink/60"><Lock size={12} /> No payment now. Pay by GPay / UPI after we confirm.</p>
             </div>
           </form>
         ) : (
@@ -186,27 +186,27 @@ export default function CartDrawer({ view, onViewChange, items, settings, onUpda
                     <div className="min-w-0 flex-1">
                       <div className="flex items-start justify-between gap-2">
                         <p className="text-sm font-semibold leading-snug">{item.product.name}</p>
-                        <button onClick={() => onRemove(item)} className="text-ink/40 hover:text-red-600" aria-label={`Remove ${item.product.name}`}><Trash2 size={15} /></button>
+                        <button onClick={() => onRemove(item)} className="-m-3 grid h-11 w-11 shrink-0 place-items-center text-ink/60 hover:text-red-600" aria-label={`Remove ${item.product.name}`}><Trash2 size={15} /></button>
                       </div>
-                      {item.printText && <p className="mt-0.5 truncate text-[11px] text-ink/50">Print: {item.printText}</p>}
+                      {item.printText && <p className="mt-0.5 truncate text-xs text-ink/60">Print: {item.printText}</p>}
                       <div className="mt-2 flex items-center justify-between">
                         <div className="flex items-center rounded-lg border border-ink/15">
-                          <button onClick={() => onUpdate(item, { qty: Math.max(minQty, item.qty - 1) })} className="grid h-8 w-8 place-items-center text-ink/60" aria-label="Decrease"><Minus size={13} /></button>
+                          <button onClick={() => onUpdate(item, { qty: Math.max(minQty, item.qty - 1) })} className="grid h-11 w-11 place-items-center text-ink/60" aria-label="Decrease quantity"><Minus size={13} /></button>
                           <input
                             type="number"
                             inputMode="numeric"
                             value={item.qty}
                             min={minQty}
                             onChange={e => onUpdate(item, { qty: Math.max(minQty, Math.floor(Number(e.target.value)) || minQty) })}
-                            className="h-8 w-14 border-x border-ink/15 text-center text-xs font-bold focus:outline-none"
+                            className="h-11 w-14 border-x border-ink/15 text-center text-sm font-bold"
                             aria-label="Quantity"
                           />
-                          <button onClick={() => onUpdate(item, { qty: item.qty + 1 })} className="grid h-8 w-8 place-items-center text-ink/60" aria-label="Increase"><Plus size={13} /></button>
+                          <button onClick={() => onUpdate(item, { qty: item.qty + 1 })} className="grid h-11 w-11 place-items-center text-ink/60" aria-label="Increase quantity"><Plus size={13} /></button>
                         </div>
                         {price != null && (
                           <div className="text-right">
                             <p className="text-sm font-bold">{formatINR(price * item.qty)}</p>
-                            <p className="text-[10px] text-ink/50">{formatINR(price)}/pc</p>
+                            <p className="text-xs text-ink/60">{formatINR(price)}/pc</p>
                           </div>
                         )}
                       </div>
@@ -217,7 +217,7 @@ export default function CartDrawer({ view, onViewChange, items, settings, onUpda
 
               <form onSubmit={applyCoupon} className="flex gap-2">
                 <div className="relative flex-1">
-                  <Tag size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/40" />
+                  <Tag size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/60" />
                   <input
                     value={couponCode}
                     onChange={e => { setCouponCode(e.target.value.toUpperCase()); setCouponState(''); }}
@@ -241,7 +241,7 @@ export default function CartDrawer({ view, onViewChange, items, settings, onUpda
               <button onClick={() => onViewChange('checkout')} className="btn-gold mt-4 w-full py-3.5 text-base">
                 Checkout · {formatINR(total)}
               </button>
-              <button onClick={close} className="mt-2 w-full text-center text-xs font-semibold text-ink/50 hover:text-ink">Continue shopping</button>
+              <button onClick={close} className="mt-1 min-h-11 w-full text-center text-xs font-semibold text-ink/60 hover:text-ink">Continue shopping</button>
             </div>
           </>
         )}
@@ -278,7 +278,7 @@ function Totals({ subtotal, bulkSavings, discount, coupon, total, shippingFree }
       {bulkSavings > 0 && <div className="flex justify-between text-green-700"><span>Bulk savings included</span><span>{formatINR(bulkSavings)}</span></div>}
       {discount > 0 && <div className="flex justify-between text-green-700"><span>Coupon {coupon.code}</span><span>-{formatINR(discount)}</span></div>}
       <div className="flex justify-between text-ink/60"><span>Shipping</span><span className={shippingFree ? 'font-bold text-green-700' : ''}>{shippingFree ? 'FREE' : 'Confirmed on WhatsApp'}</span></div>
-      <div className="flex justify-between pt-1 text-lg font-extrabold"><span>Total</span><span>{formatINR(total)} <span className="text-xs font-medium text-ink/50">+ GST</span></span></div>
+      <div className="flex justify-between pt-1 text-lg font-extrabold"><span>Total</span><span>{formatINR(total)} <span className="text-xs font-medium text-ink/60">+ GST</span></span></div>
     </div>
   );
 }

@@ -122,7 +122,7 @@ export default function CrmApp() {
           </div>
         )}
         {!data ? (
-          !error && <p className="py-20 text-center text-sm text-ink/50">Loading your store…</p>
+          !error && <p className="py-20 text-center text-sm text-ink/60">Loading your store…</p>
         ) : (
           <>
             {tab === 'products' && <ProductsTab {...props} />}

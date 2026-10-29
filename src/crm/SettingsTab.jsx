@@ -45,7 +45,7 @@ export default function SettingsTab({ data, run, busy }) {
             <input id="fs-end" type="datetime-local" className="input" value={form.offer_ends_at || ''} onChange={e => set('offer_ends_at', e.target.value)} />
           </div>
         </div>
-        <p className="text-[11px] text-ink/60">With no end date, the countdown restarts every midnight ("today's offer"). Remember to honour free shipping for orders that qualify.</p>
+        <p className="text-xs text-ink/60">With no end date, the countdown restarts every midnight ("today's offer"). Remember to honour free shipping for orders that qualify.</p>
       </fieldset>
 
       {FIELDS.map(({ key, label, placeholder, help, textarea }) => (
@@ -56,7 +56,7 @@ export default function SettingsTab({ data, run, busy }) {
           ) : (
             <input id={key} className="input" placeholder={placeholder} value={form[key] || ''} onChange={e => set(key, e.target.value)} />
           )}
-          {help && <p className="mt-1 text-[11px] text-ink/50">{help}</p>}
+          {help && <p className="mt-1 text-xs text-ink/60">{help}</p>}
         </div>
       ))}
       <button className="btn-dark" disabled={busy}>Save settings</button>

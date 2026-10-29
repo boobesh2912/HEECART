@@ -41,18 +41,18 @@ export default function CouponsTab({ data, run, busy }) {
                 {c.type === 'percent' ? `${c.value}% off` : `${formatINR(c.value)} off`}
                 {c.min_amount > 0 && <span className="font-normal text-ink/60"> on orders above {formatINR(c.min_amount)}</span>}
               </p>
-              {c.description && <p className="truncate text-xs text-ink/50">{c.description}</p>}
+              {c.description && <p className="truncate text-xs text-ink/60">{c.description}</p>}
             </div>
             <label className="flex cursor-pointer items-center gap-2 text-xs font-semibold">
               <input type="checkbox" checked={c.active} disabled={busy} onChange={() => run(upsertCoupon({ ...c, active: !c.active }), `Turned coupon ${c.code} ${c.active ? 'off' : 'on'}`)} className="h-4 w-4 accent-[#f5b301]" />
               Active
             </label>
-            <button onClick={() => window.confirm(`Delete coupon ${c.code}?`) && run(removeCoupon(c.code), `Deleted coupon ${c.code}`)} className="grid h-9 w-9 place-items-center rounded-lg text-ink/50 hover:bg-cream hover:text-red-600" aria-label={`Delete ${c.code}`}>
+            <button onClick={() => window.confirm(`Delete coupon ${c.code}?`) && run(removeCoupon(c.code), `Deleted coupon ${c.code}`)} className="grid h-9 w-9 place-items-center rounded-lg text-ink/60 hover:bg-cream hover:text-red-600" aria-label={`Delete ${c.code}`}>
               <Trash2 size={16} />
             </button>
           </li>
         ))}
-        {coupons.length === 0 && <li className="rounded-2xl border border-dashed border-ink/20 py-8 text-center text-sm text-ink/50">No coupons yet.</li>}
+        {coupons.length === 0 && <li className="rounded-2xl border border-dashed border-ink/20 py-8 text-center text-sm text-ink/60">No coupons yet.</li>}
       </ul>
 
       <form onSubmit={add} className="mt-6 grid gap-3 rounded-2xl border border-ink/10 bg-white p-5 sm:grid-cols-2">

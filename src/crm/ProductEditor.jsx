@@ -137,9 +137,9 @@ export default function ProductEditor({ product, products, categories, busy, onC
             <p className="label">Photos</p>
             <div className="flex flex-wrap gap-3">
               <div className="relative h-32 w-32 overflow-hidden rounded-2xl border-2 border-gold-500 bg-cream">
-                {form.image ? <img src={imgSrc(form.image)} alt="" className="h-full w-full object-cover" /> : <div className="grid h-full place-items-center text-xs text-ink/40">No photo</div>}
-                <span className="absolute left-1.5 top-1.5 rounded bg-gold-500 px-1.5 py-0.5 text-[10px] font-bold">MAIN</span>
-                <button type="button" onClick={() => mainInput.current.click()} className="absolute inset-x-1.5 bottom-1.5 rounded-lg bg-ink/80 py-1 text-[11px] font-semibold text-white">
+                {form.image ? <img src={imgSrc(form.image)} alt="" className="h-full w-full object-cover" /> : <div className="grid h-full place-items-center text-xs text-ink/60">No photo</div>}
+                <span className="absolute left-1.5 top-1.5 rounded bg-gold-500 px-1.5 py-0.5 text-xs font-bold">MAIN</span>
+                <button type="button" onClick={() => mainInput.current.click()} className="absolute inset-x-1.5 bottom-1.5 rounded-lg bg-ink/80 py-1 text-xs font-semibold text-white">
                   {form.image ? 'Replace' : 'Upload'}
                 </button>
               </div>
@@ -152,7 +152,7 @@ export default function ProductEditor({ product, products, categories, busy, onC
                   </div>
                 </div>
               ))}
-              <button type="button" onClick={() => galleryInput.current.click()} className="grid h-32 w-32 place-items-center rounded-2xl border-2 border-dashed border-ink/20 text-ink/50 hover:border-gold-500 hover:text-ink">
+              <button type="button" onClick={() => galleryInput.current.click()} className="grid h-32 w-32 place-items-center rounded-2xl border-2 border-dashed border-ink/20 text-ink/60 hover:border-gold-500 hover:text-ink">
                 <span className="flex flex-col items-center gap-1 text-xs font-semibold">
                   {uploading ? <Loader2 size={20} className="animate-spin" /> : <ImagePlus size={20} />}
                   {uploading ? 'Uploading…' : 'Add more photos'}
@@ -192,12 +192,12 @@ export default function ProductEditor({ product, products, categories, busy, onC
               <label className="label" htmlFor="slug">Link name</label>
               <input
                 id="slug"
-                className="input disabled:bg-ink/5 disabled:text-ink/50"
+                className="input disabled:bg-ink/5 disabled:text-ink/60"
                 value={form.id}
                 disabled={!isNew}
                 onChange={e => { setIdTouched(true); set('id', slugify(e.target.value)); }}
               />
-              <p className="mt-1 text-[11px] text-ink/50">heecart…/p/{form.id || 'product-name'}{!isNew && ' (fixed so shared links keep working)'}</p>
+              <p className="mt-1 text-xs text-ink/60">heecart…/p/{form.id || 'product-name'}{!isNew && ' (fixed so shared links keep working)'}</p>
             </div>
           </section>
 
@@ -213,13 +213,13 @@ export default function ProductEditor({ product, products, categories, busy, onC
                   <input className="input py-2" value={tier.label} onChange={e => setTier(i, 'label', e.target.value)} aria-label="Slab label" />
                   <input className="input py-2" type="number" min="1" value={tier.min} onChange={e => setTier(i, 'min', e.target.value)} aria-label="From quantity" />
                   <input className="input py-2" type="number" min="0" placeholder="—" value={tier.price} onChange={e => setTier(i, 'price', e.target.value)} aria-label="Price" />
-                  <button type="button" onClick={() => set('tiers', form.tiers.filter((_, j) => j !== i))} className="grid h-9 w-9 place-items-center rounded-lg text-ink/40 hover:text-red-600" aria-label="Remove slab"><Trash2 size={15} /></button>
+                  <button type="button" onClick={() => set('tiers', form.tiers.filter((_, j) => j !== i))} className="grid h-9 w-9 place-items-center rounded-lg text-ink/60 hover:text-red-600" aria-label="Remove slab"><Trash2 size={15} /></button>
                 </div>
               ))}
             </div>
             <div className="mt-2 flex flex-wrap gap-3 text-xs">
-              <button type="button" onClick={() => set('tiers', [...form.tiers, { label: '', min: '', price: '' }])} className="flex items-center gap-1 font-semibold text-gold-700"><Plus size={14} /> Add slab</button>
-              <span className="text-ink/50">Leave a price empty to skip that slab (e.g. no single-piece orders).</span>
+              <button type="button" onClick={() => set('tiers', [...form.tiers, { label: '', min: '', price: '' }])} className="flex items-center gap-1 font-semibold text-gold-800"><Plus size={14} /> Add slab</button>
+              <span className="text-ink/60">Leave a price empty to skip that slab (e.g. no single-piece orders).</span>
             </div>
           </section>
 
